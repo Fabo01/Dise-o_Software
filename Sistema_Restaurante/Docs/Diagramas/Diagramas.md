@@ -2,6 +2,25 @@
 
 Este documento presenta diversos diagramas que ilustran la arquitectura, diseño y componentes tanto del sistema actual como del sistema refactorizado, permitiendo una comparación visual de los cambios y mejoras implementadas.
 
+## Glosario de Referencias
+
+Para facilitar la referencia a diagramas específicos en la documentación y en futuras implementaciones, utilizamos el siguiente sistema de codificación:
+
+| Código | Descripción |
+|--------|-------------|
+| **DAA** | Diagrama de Arquitectura Actual |
+| **DAR** | Diagrama de Arquitectura Refactorizado |
+| **DPA** | Diagrama de Patrones Actual |
+| **DPR** | Diagrama de Patrones Refactorizado |
+| **DCA** | Diagrama de Clases Actual |
+| **DCR** | Diagrama de Clases Refactorizado |
+| **MERA** | Modelo Entidad-Relación Actual |
+| **MERR** | Modelo Entidad-Relación Refactorizado |
+| **DOA** | Diagrama de Objetos Actual |
+| **DOR** | Diagrama de Objetos Refactorizado |
+| **DCOA** | Diagrama de Componentes Actual |
+| **DCOR** | Diagrama de Componentes Refactorizado |
+
 ## Índice
 1. [Diagramas de Arquitectura](#diagramas-de-arquitectura)
 2. [Diagramas de Patrones de Diseño](#diagramas-de-patrones-de-diseño)
@@ -12,7 +31,7 @@ Este documento presenta diversos diagramas que ilustran la arquitectura, diseño
 
 ## Diagramas de Arquitectura
 
-### Sistema Actual: Arquitectura Monolítica de Escritorio
+### Sistema Actual: Arquitectura Monolítica de Escritorio (DAA)
 
 ```mermaid
 flowchart TD
@@ -39,7 +58,7 @@ flowchart TD
 - Base de datos local SQLite sin capacidad de acceso simultáneo
 - Único actor con acceso al sistema (Jefe de Local)
 
-### Sistema Refactorizado: Arquitectura de Aplicación Web Distribuida
+### Sistema Refactorizado: Arquitectura de Aplicación Web Distribuida (DAR)
 
 ```mermaid
 flowchart TD
@@ -120,7 +139,7 @@ flowchart TD
 
 ## Diagramas de Patrones de Diseño
 
-### Sistema Actual: Patrones Limitados
+### Sistema Actual: Patrones Limitados (DPA)
 
 ```mermaid
 classDiagram
@@ -173,7 +192,7 @@ classDiagram
     note for DBConnection "Singleton Pattern\nÚnica conexión a BD"
 ```
 
-### Sistema Refactorizado: Implementación de Múltiples Patrones
+### Sistema Refactorizado: Implementación de Múltiples Patrones (DPR)
 
 ```mermaid
 classDiagram
@@ -304,7 +323,7 @@ classDiagram
 
 ## Diagramas de Clases
 
-### Sistema Actual: Modelo Simplificado
+### Sistema Actual: Modelo Simplificado (DCA)
 
 ```mermaid
 classDiagram
@@ -361,7 +380,7 @@ classDiagram
     Pedido "*" -- "1" Cliente
 ```
 
-### Sistema Refactorizado: Modelo Expandido
+### Sistema Refactorizado: Modelo Expandido (DCR)
 
 ```mermaid
 classDiagram
@@ -527,7 +546,7 @@ classDiagram
 
 ## Diagramas MER
 
-### Sistema Actual: Modelo Entidad-Relación Básico
+### Sistema Actual: Modelo Entidad-Relación Básico (MERA)
 
 ```mermaid
 erDiagram
@@ -584,7 +603,7 @@ erDiagram
     MENU_INGREDIENTE }|--|| INGREDIENTE : usa
 ```
 
-### Sistema Refactorizado: Modelo Entidad-Relación Completo
+### Sistema Refactorizado: Modelo Entidad-Relación Completo (MERR)
 
 ```mermaid
 erDiagram
@@ -750,7 +769,7 @@ erDiagram
 
 ## Diagramas de Objetos
 
-### Sistema Actual: Instancias Básicas
+### Sistema Actual: Instancias Básicas (DOA)
 
 ```mermaid
 classDiagram
@@ -822,7 +841,7 @@ classDiagram
     MenuIngrediente_PizzaQueso --> Ingrediente_Queso
 ```
 
-### Sistema Refactorizado: Instancias Avanzadas
+### Sistema Refactorizado: Instancias Avanzadas (DOR)
 
 ```mermaid
 classDiagram
@@ -964,7 +983,7 @@ classDiagram
 
 ## Diagramas de Componentes
 
-### Sistema Actual: Componentes Básicos
+### Sistema Actual: Componentes Básicos (DCOA)
 
 ```mermaid
 flowchart TD
@@ -989,7 +1008,7 @@ flowchart TD
     Reportes --- DB
 ```
 
-### Sistema Refactorizado: Componentes Distribuidos
+### Sistema Refactorizado: Componentes Distribuidos (DCOR)
 
 ```mermaid
 flowchart TD
@@ -1049,13 +1068,13 @@ flowchart TD
 
 La refactorización del sistema incluye las siguientes mejoras significativas:
 
-1. **Arquitectura**: Migración de una aplicación monolítica de escritorio a una arquitectura web cliente-servidor con separación de responsabilidades.
+1. **Arquitectura (DAA → DAR)**: Migración de una aplicación monolítica de escritorio a una arquitectura web cliente-servidor con separación de responsabilidades.
 
-2. **Patrones de Diseño**: Implementación de múltiples patrones como Repository, Factory, Observer, State y Facade para mejorar la mantenibilidad y escalabilidad.
+2. **Patrones de Diseño (DPA → DPR)**: Implementación de múltiples patrones como Repository, Factory, Observer, State y Facade para mejorar la mantenibilidad y escalabilidad.
 
-3. **Modelo de Datos**: Expansión del modelo con nuevas entidades como Mesa, DeliveryPedido, Transaccion y Usuario, habilitando nuevas funcionalidades de negocio.
+3. **Modelo de Datos (DCA → DCR, MERA → MERR)**: Expansión del modelo con nuevas entidades como Mesa, DeliveryPedido, Transaccion y Usuario, habilitando nuevas funcionalidades de negocio.
 
-4. **Componentes**: Distribución en componentes independientes y especializados que pueden evolucionar de manera separada.
+4. **Componentes (DCOA → DCOR)**: Distribución en componentes independientes y especializados que pueden evolucionar de manera separada.
 
 5. **Acceso**: Transformación de un sistema de acceso único a uno multiusuario con diferentes roles y permisos.
 
