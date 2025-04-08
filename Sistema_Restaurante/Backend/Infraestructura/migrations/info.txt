@@ -1,0 +1,1 @@
+Carepta creada por django para crear en su servidor las tablas, estas siempre se crean o verifican su existencia al iniciar el servidor
