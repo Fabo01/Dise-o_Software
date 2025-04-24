@@ -1,72 +1,77 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, List, Optional, Any
+from typing import Generic, TypeVar, List, Optional, Dict, Any
 
 T = TypeVar('T')
 
 class IRepository(Generic[T], ABC):
     """
-    Interfaz genérica que define las operaciones básicas CRUD
-    que todos los repositorios deben implementar.
+    Interface genérica para repositorios que define operaciones CRUD básicas.
+    
+    Args:
+        T: Tipo de entidad que maneja el repositorio
     """
     
     @abstractmethod
-    def get(self, id: Any) -> Optional[T]:
+    def obtener_por_id(self, id: int) -> Optional[T]:
         """
-        Obtiene una entidad por su identificador.
+        Obtiene una entidad por su ID
         
         Args:
-            id: El identificador único de la entidad.
+            id: Identificador único de la entidad
             
         Returns:
-            La entidad encontrada o None si no existe.
+            La entidad si existe, None en caso contrario
         """
         pass
     
     @abstractmethod
-    def get_all(self) -> List[T]:
+    def listar(self, filtros: Optional[Dict[str, Any]] = None) -> List[T]:
         """
-        Obtiene todas las entidades disponibles.
+        Lista entidades con filtros opcionales
         
+        Args:
+            filtros: Diccionario de condiciones para filtrar resultados
+            
         Returns:
-            Lista de todas las entidades.
+            Lista de entidades que cumplen los criterios
         """
         pass
     
     @abstractmethod
-    def add(self, entity: T) -> T:
+    def crear(self, entidad: T) -> T:
         """
-        Añade una nueva entidad al repositorio.
+        Crea una nueva entidad
         
         Args:
-            entity: La entidad a añadir.
+            entidad: La entidad a crear
             
         Returns:
-            La entidad añadida con su ID asignado.
+            La entidad creada con su ID asignado
         """
         pass
     
     @abstractmethod
-    def update(self, entity: T) -> T:
+    def actualizar(self, entidad: T) -> T:
         """
-        Actualiza una entidad existente.
+        Actualiza una entidad existente
         
         Args:
-            entity: La entidad con los datos actualizados.
+            entidad: La entidad con los datos actualizados
             
         Returns:
-            La entidad actualizada.
+            La entidad actualizada
         """
         pass
     
     @abstractmethod
-    def delete(self, id: Any) -> bool:
+    def eliminar(self, id: int) -> bool:
         """
-        Elimina una entidad por su identificador.
+        Elimina una entidad por su ID
         
         Args:
-            id: El identificador único de la entidad.
+            id: Identificador único de la entidad
             
         Returns:
-            True si la eliminación fue exitosa, False en caso contrario.
+            True si se eliminó correctamente, False en caso contrario
         """
         pass
