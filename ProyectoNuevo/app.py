@@ -1,4 +1,3 @@
-import customtkinter as ctk
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from tkinter import messagebox 
