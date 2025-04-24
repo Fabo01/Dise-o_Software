@@ -93,29 +93,7 @@ El sistema refactorizado distribuye responsabilidades entre diferentes roles, op
 
 Este módulo ahora permite que tanto Jefes de Local como meseros gestionen información de clientes.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Registrar Cliente]
-    JL --> C[Editar Cliente]
-    JL --> D[Eliminar Cliente]
-    JL --> E[Buscar Cliente]
-    JL --> F[Ver Historial de Pedidos]
-    M((Mesero)) --> B
-    M --> C
-    M --> E
-    M --> F
-    
-    subgraph Gestión de Clientes
-    B
-    C
-    D
-    E
-    F
-    end
-    
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class B,C,E,F shared
-```
+![Gestión de clientes](Casos_de_Uso/gestion_de_clientes_Refactorizado.png)
 
 **Nota**: Se delegan responsabilidades a los meseros para registrar y consultar clientes, mejorando la eficiencia del servicio. La eliminación sigue siendo exclusiva del Jefe de Local por motivos de seguridad.
 
@@ -123,27 +101,7 @@ flowchart TD
 
 Este módulo ahora incluye participación del personal de cocina para gestión de stock.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Agregar Ingrediente]
-    JL --> C[Editar Ingrediente]
-    JL --> D[Eliminar Ingrediente]
-    JL --> E[Actualizar Stock]
-    JL --> F[Verificar Disponibilidad]
-    K((Cocina)) --> E
-    K --> F
-    
-    subgraph Gestión de Ingredientes
-    B
-    C
-    D
-    E
-    F
-    end
-    
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class E,F shared
-```
+![Gestión de clientes](Casos_de_Uso/Gestion_de_Ingredientes_Refactorizado.png)
 
 **Nota**: El personal de cocina ahora puede actualizar el stock y verificar disponibilidad en tiempo real, mientras que la gestión de catálogo sigue siendo responsabilidad administrativa.
 
@@ -151,30 +109,7 @@ flowchart TD
 
 Este módulo ahora permite que la cocina verifique disponibilidad de menús basados en ingredientes.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Crear Menú]
-    JL --> C[Editar Menú]
-    JL --> D[Eliminar Menú]
-    JL --> E[Asignar Ingredientes]
-    JL --> F[Verificar Disponibilidad]
-    K((Cocina)) --> F
-    K --> G[Ver Menús Disponibles]
-    
-    subgraph Gestión de Menús
-    B
-    C
-    D
-    E
-    F
-    G
-    end
-    
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class F shared
-    classDef new fill:#ffe6cc,stroke:#d79b00
-    class G new
-```
+![Gestión de clientes](Casos_de_Uso/Gestion_de_Menus_Refactorizado.png)
 
 **Nota**: Se añade la funcionalidad para que la cocina vea los menús disponibles (marcado en naranja) y verifique disponibilidad según los ingredientes en stock.
 
@@ -182,39 +117,7 @@ flowchart TD
 
 Este módulo ahora distribuye la gestión de pedidos entre Jefes de Local, meseros y cocina.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Crear Pedido]
-    JL --> C[Editar Pedido]
-    JL --> D[Cancelar Pedido]
-    JL --> E[Asignar Cliente]
-    JL --> F[Agregar Menús]
-    JL --> G[Generar Boleta]
-    M((Mesero)) --> B
-    M --> C
-    M --> D
-    M --> E
-    M --> F
-    M --> G
-    K((Cocina)) --> H[Ver Pedidos Pendientes]
-    K --> I[Actualizar Estado Pedido]
-    
-    subgraph Gestión de Pedidos
-    B
-    C
-    D
-    E
-    F
-    G
-    H
-    I
-    end
-    
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class B,C,D,E,F,G shared
-    classDef new fill:#ffe6cc,stroke:#d79b00
-    class H,I new
-```
+![Gestión de clientes](Casos_de_Uso/Gestion_de_Pedidos_Refactorizado.png)
 
 **Nota**: Los meseros ahora tienen acceso completo a la gestión de pedidos, y se han añadido nuevas funcionalidades (marcadas en naranja) para que la cocina pueda ver pedidos pendientes y actualizar su estado.
 
@@ -222,32 +125,7 @@ flowchart TD
 
 Este módulo es completamente nuevo y permite administrar las mesas del restaurante.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Registrar Mesa]
-    JL --> C[Editar Mesa]
-    JL --> D[Eliminar Mesa]
-    JL --> E[Cambiar Estado]
-    JL --> F[Asignar Cliente]
-    JL --> G[Calcular Tiempo Ocupación]
-    M((Mesero)) --> E
-    M --> F
-    M --> G
-    
-    subgraph Gestión de Mesas
-    B
-    C
-    D
-    E
-    F
-    G
-    end
-    
-    classDef new fill:#ffe6cc,stroke:#d79b00
-    class B,C,D,E,F,G new
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class E,F,G shared
-```
+![Gestión de clientes](Casos_de_Uso/Gestion_de_Mesas_(nuevo).png)
 
 **Nota**: Esta nueva funcionalidad (todos los casos de uso marcados en naranja) permite administrar el espacio físico del restaurante. Los meseros pueden cambiar estados, asignar clientes y monitorear tiempos (marcados en verde para compartido).
 
@@ -255,29 +133,7 @@ flowchart TD
 
 Este módulo es completamente nuevo y maneja pedidos para entrega a domicilio.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Registrar Pedido Delivery]
-    JL --> C[Asignar Repartidor]
-    JL --> D[Seguir Estado Entrega]
-    JL --> E[Gestionar Apps Delivery]
-    JL --> F[Calcular Comisiones]
-    M((Mesero)) --> B
-    M --> D
-    
-    subgraph Sistema de Delivery
-    B
-    C
-    D
-    E
-    F
-    end
-    
-    classDef new fill:#ffe6cc,stroke:#d79b00
-    class B,C,D,E,F new
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class B,D shared
-```
+![Gestión de clientes](Casos_de_Uso/Sistema_de_Delivery_(Nuevo).png)
 
 **Nota**: Este módulo completamente nuevo (todos los casos marcados en naranja) permite gestionar pedidos a domicilio, con algunas tareas compartidas con meseros (marcadas en verde).
 
@@ -285,32 +141,7 @@ flowchart TD
 
 Este módulo es completamente nuevo y gestiona las transacciones financieras.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Registrar Medio de Pago]
-    JL --> C[Procesar Pago]
-    JL --> D[Generar Transacción]
-    JL --> E[Verificar Estado]
-    JL --> F[Emitir Comprobante]
-    M((Mesero)) --> C
-    M --> E
-    M --> F
-    JT((Jefe de Turno)) --> H[Ver Estadísticas de Pagos]
-    
-    subgraph Sistema de Pagos
-    B
-    C
-    D
-    E
-    F
-    H
-    end
-    
-    classDef new fill:#ffe6cc,stroke:#d79b00
-    class B,C,D,E,F,H new
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class C,E,F shared
-```
+![Gestión de clientes](Casos_de_Uso/Sistema_de_Pagos_(Nuevo).png)
 
 **Nota**: Este nuevo módulo (todos los casos marcados en naranja) permite manejar múltiples formas de pago. Los meseros pueden procesar pagos y emitir comprobantes (marcados en verde), mientras que los Jefes de Turno acceden a estadísticas específicas.
 
@@ -318,32 +149,7 @@ flowchart TD
 
 Este módulo amplía significativamente las capacidades de reportes del sistema original.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Ver KPIs]
-    JL --> C[Filtrar por Periodo]
-    JL --> D[Analizar Tendencias]
-    JL --> E[Visualizar Popularidad Menús]
-    JL --> F[Exportar Reportes PDF]
-    JT((Jefe de Turno)) --> B
-    JT --> C
-    JT --> D
-    JT --> E
-    JT --> F
-    
-    subgraph Dashboard Analítico
-    B
-    C
-    D
-    E
-    F
-    end
-    
-    classDef enhanced fill:#d4e1f5,stroke:#3c78d8
-    class B,C,D,E,F enhanced
-    classDef shared fill:#d5e8d4,stroke:#82b366
-    class B,C,D,E,F shared
-```
+![Gestión de clientes](Casos_de_Uso/Dashboard_Analogico_Mejorado.png)
 
 **Nota**: Este módulo representa una mejora significativa sobre los reportes básicos (todos marcados en azul). Tanto Jefes de Local como Jefes de Turno tienen acceso completo a estas funcionalidades analíticas (todos compartidos, marcados en verde).
 
