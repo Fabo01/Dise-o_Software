@@ -49,22 +49,7 @@ El sistema actual está centralizado principalmente en el rol del Jefe de Local 
 
 Este módulo permite administrar la información de los clientes y ver su historial de compras.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Registrar Cliente]
-    JL --> C[Editar Cliente]
-    JL --> D[Eliminar Cliente]
-    JL --> E[Buscar Cliente]
-    JL --> F[Ver Historial de Pedidos]
-    
-    subgraph Gestión de Clientes
-    B
-    C
-    D
-    E
-    F
-    end
-```
+![Gestión de clientes](Casos_de_Uso/Gestion_de_clientes.png)
 
 **Nota**: En el sistema actual, todas las operaciones relacionadas con clientes solo pueden ser realizadas por el Jefe de Local, lo que crea un cuello de botella en la operación.
 
@@ -72,22 +57,7 @@ flowchart TD
 
 Este módulo controla el inventario de ingredientes disponibles para la preparación de los platos.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Agregar Ingrediente]
-    JL --> C[Editar Ingrediente]
-    JL --> D[Eliminar Ingrediente]
-    JL --> E[Actualizar Stock]
-    JL --> F[Verificar Disponibilidad]
-    
-    subgraph Gestión de Ingredientes
-    B
-    C
-    D
-    E
-    F
-    end
-```
+![Gestión de Ingredientes](Casos_de_Uso/Gestion_de_Ingredientes.png)
 
 **Nota**: La gestión de inventario está completamente centralizada, obligando al Jefe de Local a actualizar manualmente el stock sin participación del personal de cocina.
 
@@ -95,22 +65,7 @@ flowchart TD
 
 Este módulo permite crear y mantener el catálogo de platos ofrecidos en el restaurante.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Crear Menú]
-    JL --> C[Editar Menú]
-    JL --> D[Eliminar Menú]
-    JL --> E[Asignar Ingredientes]
-    JL --> F[Verificar Disponibilidad]
-    
-    subgraph Gestión de Menús
-    B
-    C
-    D
-    E
-    F
-    end
-```
+![Gestión de Menús](Casos_de_Uso/Gestion_de_Menus.png)
 
 **Nota**: La verificación de disponibilidad debe hacerse manualmente por el Jefe de Local, sin un sistema automático que relacione ingredientes y menús.
 
@@ -118,24 +73,7 @@ flowchart TD
 
 Este módulo maneja la creación y procesamiento de órdenes de los clientes.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Crear Pedido]
-    JL --> C[Editar Pedido]
-    JL --> D[Cancelar Pedido]
-    JL --> E[Asignar Cliente]
-    JL --> F[Agregar Menús]
-    JL --> G[Generar Boleta]
-    
-    subgraph Gestión de Pedidos
-    B
-    C
-    D
-    E
-    F
-    G
-    end
-```
+![Gestión de Pedidos](Casos_de_Uso/Gestion_de_Pedidos.png)
 
 **Nota**: Todo el proceso de pedidos recae en el Jefe de Local, desde la creación hasta la generación de boletas, sin intervención de los meseros que atienden directamente a los clientes.
 
@@ -143,18 +81,7 @@ flowchart TD
 
 Este módulo proporciona información estadística básica sobre la operación del restaurante.
 
-```mermaid
-flowchart TD
-    JL((Jefe de Local)) --> B[Ver Estadísticas Básicas]
-    JL --> C[Generar Reporte de Ventas]
-    JL --> D[Ver Uso de Ingredientes]
-    
-    subgraph Reportes Básicos
-    B
-    C
-    D
-    end
-```
+![Generación de Reportes](Casos_de_Uso/Reportes_Basicos.png)
 
 **Nota**: Las capacidades analíticas están limitadas a reportes básicos sin opciones avanzadas de filtrado o visualización.
 
