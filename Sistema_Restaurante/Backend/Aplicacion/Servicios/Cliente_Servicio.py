@@ -2,20 +2,23 @@ from datetime import datetime
 from Backend.Aplicacion.Interfaces.Cliente_Repositorio_Interfaz import IClienteRepositorio
 from Backend.Dominio.Entidades.Cliente_Entidad import ClienteEntidad
 from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
+from Backend.Aplicacion.Servicios.ObserverService import ObserverService
 
 class ClienteServicio:
     """
     Servicio que implementa los casos de uso relacionados con la gestión de clientes.
     """
     
-    def __init__(self, cliente_repositorio: IClienteRepositorio):
+    def __init__(self, cliente_repositorio: IClienteRepositorio, observer_service: ObserverService = None):
         """
         Constructor del servicio de cliente
         
         Args:
             cliente_repositorio (IClienteRepositorio): Repositorio de clientes a utilizar
+            observer_service (ObserverService, opcional): Servicio para gestionar observadores
         """
         self.cliente_repositorio = cliente_repositorio
+        self.observer_service = observer_service or ObserverService()
     
     def registrar_cliente(self, datos_cliente):
         """
@@ -59,7 +62,12 @@ class ClienteServicio:
         )
         
         # Guardar usando el repositorio
-        return self.cliente_repositorio.guardar(cliente)
+        cliente_guardado = self.cliente_repositorio.guardar(cliente)
+        # Notificar a los observadores si hay alguno registrado
+        if self.observer_service:
+            mensaje = f"Nuevo cliente registrado: {cliente_guardado.nombre} ({cliente_guardado.rut})"
+            self.observer_service.notificar(mensaje)
+        return cliente_guardado
         
     def actualizar_cliente(self, id, datos_cliente):
         """

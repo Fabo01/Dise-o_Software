@@ -5,6 +5,8 @@ from .Cliente_Entidad import Cliente
 from .Mesa_Entidad import Mesa
 from .ItemPedido_Entidad import ItemPedido
 from ..Excepciones.DominioExcepcion import ValidacionExcepcion, OperacionInvalidaExcepcion
+from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverService
+from Backend.Aplicacion.Servicios.ObserversNotificaciones import CocinaNotificationObserver, MeseroNotificationObserver
 
 class Pedido(EntidadBase):
     """
@@ -14,7 +16,7 @@ class Pedido(EntidadBase):
     # Estados posibles para un pedido
     ESTADOS = ["recibido", "en_preparacion", "listo", "entregado", "pagado", "cancelado"]
     
-    def __init__(self, cliente: Cliente, items: List[ItemPedido] = None, mesa: Mesa = None):
+    def __init__(self, cliente: Cliente, items: List[ItemPedido] = None, mesa: Mesa = None, observer_service: ObserverService = None):
         """
         Constructor para la entidad Pedido
         
@@ -38,6 +40,7 @@ class Pedido(EntidadBase):
         self._fecha_pedido = datetime.now()
         self._hora_entrega = None
         self._notas = ""
+        self._observer_service = observer_service
     
     # Getters
     @property
@@ -175,6 +178,11 @@ class Pedido(EntidadBase):
             self._hora_entrega = datetime.now()
             
         self.actualizar_fecha()
+        
+        # Notificar a observadores si hay observer_service
+        if self._observer_service:
+            mensaje = f"Pedido #{self._id or 'nuevo'} cambió a estado: {nuevo_estado}"
+            self._observer_service.notificar(mensaje)
     
     def agregar_nota(self, nota: str):
         """
