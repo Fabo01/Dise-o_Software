@@ -10,7 +10,7 @@ class Mesa(EntidadBase):
     """
     
     # Estados posibles para una mesa
-    ESTADOS = ["libre", "ocupada", "reservada", "en_limpieza"]
+    ESTADOS = ["libre", "ocupada", "reservada"]
     
     def __init__(self, numero: str, capacidad: int, ubicacion: str = "", caracteristicas: str = ""):
         """
@@ -21,7 +21,6 @@ class Mesa(EntidadBase):
             capacidad (int): Cantidad máxima de personas que pueden sentarse
             ubicacion (str, opcional): Zona del restaurante donde está ubicada
             caracteristicas (str, opcional): Características especiales de la mesa
-            
         Raises:
             ValidacionExcepcion: Si los datos proporcionados no son válidos
         """
@@ -180,8 +179,7 @@ class Mesa(EntidadBase):
         """
         # Una mesa es adecuada si tiene capacidad suficiente sin desperdiciar demasiado espacio
         # La heurística es: capacidad >= cantidad_personas y capacidad <= cantidad_personas + 2
-        return (self._capacidad >= cantidad_personas and 
-                self._capacidad <= cantidad_personas + 2)
+        return (self._capacidad >= cantidad_personas and self._capacidad <= cantidad_personas + 2)
     
     def __str__(self):
         return f"Mesa {self._numero} ({self._capacidad} personas) - {self._estado}"

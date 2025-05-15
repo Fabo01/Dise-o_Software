@@ -8,15 +8,8 @@ class ClienteServicio:
     """
     Servicio que implementa los casos de uso relacionados con la gestión de clientes.
     """
-    
-    def __init__(self, cliente_repositorio: IClienteRepositorio, observer_service: ObserverService = None):
-        """
-        Constructor del servicio de cliente
-        
-        Args:
-            cliente_repositorio (IClienteRepositorio): Repositorio de clientes a utilizar
-            observer_service (ObserverService, opcional): Servicio para gestionar observadores
-        """
+    def __init__(self, cliente_repositorio, observer_service=None):
+        # Inyección de dependencias (Dependency Injection)
         self.cliente_repositorio = cliente_repositorio
         self.observer_service = observer_service or ObserverService()
     

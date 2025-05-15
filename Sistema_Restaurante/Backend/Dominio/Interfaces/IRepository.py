@@ -6,9 +6,6 @@ T = TypeVar('T')
 class IRepository(Generic[T], ABC):
     """
     Interface genérica para repositorios que define operaciones CRUD básicas.
-    
-    Args:
-        T: Tipo de entidad que maneja el repositorio
     """
     
     @abstractmethod
