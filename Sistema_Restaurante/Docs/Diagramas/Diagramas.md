@@ -282,7 +282,49 @@ classDiagram
         +nextState()
         +getStatusInfo()
     }
-    
+
+    %% Patrón Strategy para diferentes lógicas de procesamiento
+    class PriceStrategy {
+        <<interface>>
+        +calculatePrice(order)
+    }
+    class TaxStrategy {
+        <<interface>>
+        +calculateTax(order)
+    }
+    class StandardPriceStrategy {
+        +calculatePrice(order)
+    }
+    class DiscountPriceStrategy {
+        +calculatePrice(order)
+    }
+    class StandardTaxStrategy {
+        +calculateTax(order)
+    }
+    class ReducedTaxStrategy {
+        +calculateTax(order)
+    }
+
+    %% Patrón Template Method para reportes
+    class ReportGenerator {
+        +generateReport()
+        #fetchData()
+        #formatData()
+        #export()
+    }
+    class SalesReportGenerator {
+        +generateReport()
+        #fetchData()
+        #formatData()
+        #export()
+    }
+    class InventoryReportGenerator {
+        +generateReport()
+        #fetchData()
+        #formatData()
+        #export()
+    }
+
     class DashboardFacade {
         -salesAnalyzer
         -inventoryAnalyzer
@@ -292,23 +334,38 @@ classDiagram
         +getInventoryStatus()
         +getCustomerStatistics()
     }
-    
+
     IRepository <|-- ClientRepository
     IRepository <|-- MenuRepository
-    ClientService o-- IRepository
-    MenuService o-- IRepository
+    ClientService o-- IRepository : <<Dependency Injection>>
+    MenuService o-- IRepository : <<Dependency Injection>>
     OrderState <|-- ReceivedState
     OrderState <|-- PreparingState
     OrderState <|-- ReadyState
     OrderState <|-- DeliveredState
     Order o-- OrderState
     Order --> NotificationObserver
-    
+
+    %% Relaciones para Strategy
+    Order o-- PriceStrategy
+    Order o-- TaxStrategy
+    PriceStrategy <|.. StandardPriceStrategy
+    PriceStrategy <|.. DiscountPriceStrategy
+    TaxStrategy <|.. StandardTaxStrategy
+    TaxStrategy <|.. ReducedTaxStrategy
+
+    %% Relaciones para Template Method
+    ReportGenerator <|-- SalesReportGenerator
+    ReportGenerator <|-- InventoryReportGenerator
+
     note for IRepository "Repository Pattern\nAbstracción de acceso a datos"
+    note for ClientService "Dependency Injection\nRepositorios inyectados en servicios"
     note for OrderFactory "Factory Pattern\nCreación de diferentes tipos de pedidos"
     note for Order "Observer Pattern\nNotificación de cambios de estado"
     note for OrderState "State Pattern\nDistintos comportamientos según estado"
     note for DashboardFacade "Facade Pattern\nInterface simplificada para análisis"
+    note for PriceStrategy "Strategy Pattern\nAlgoritmos intercambiables para precios/impuestos"
+    note for ReportGenerator "Template Method Pattern\nEstructura estándar para reportes"
 ```
 
 **Patrones implementados en el sistema refactorizado:**
