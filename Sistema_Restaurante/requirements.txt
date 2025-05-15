@@ -1,0 +1,39 @@
+# Django y Django REST Framework para el backend
+Django==4.2.5
+djangorestframework==3.14.0
+django-cors-headers==4.2.0
+djangorestframework-simplejwt==5.3.0
+
+# Para manejo de base de datos
+psycopg2-binary==2.9.7  # PostgreSQL
+dj-database-url==2.0.0
+
+# Para procesamiento y validación de datos
+python-dateutil==2.8.2
+Pillow==10.0.0  # Para manejo de imágenes
+pydantic==2.3.0  # Validación de datos
+
+# Para gráficos y reportes
+matplotlib==3.7.2
+numpy==1.25.2
+pandas==2.0.3
+reportlab==4.0.4  # Generación de PDF
+
+# Para tests
+pytest==7.4.0
+pytest-django==4.5.2
+coverage==7.3.1
+
+# Utilidades
+python-dotenv==1.0.0  # Para variables de entorno
+requests==2.31.0  # Para llamadas a APIs externas
+celery==5.3.1  # Para tareas asíncronas
+
+# Para producción
+gunicorn==21.2.0
+whitenoise==6.5.0  # Servir archivos estáticos
+
+# Herramientas de desarrollo
+black==23.7.0  # Formateador de código
+flake8==6.1.0  # Linter
+isort==5.12.0  # Organizador de imports

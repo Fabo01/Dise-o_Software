@@ -1,6 +1,6 @@
 from datetime import datetime
 from .EntidadBase import EntidadBase
-from ..objetos_valor.CorreoVO import CorreoVO
+from ..objetos_valor.Correo_VO import CorreoVO
 from ..objetos_valor.RutVO import RutVO
 from ..objetos_valor.TelefonoVO import TelefonoVO
 from ..Excepciones.DominioExcepcion import ValidacionExcepcion
