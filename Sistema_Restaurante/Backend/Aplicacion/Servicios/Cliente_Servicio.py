@@ -1,8 +1,8 @@
 from datetime import datetime
 from Backend.Aplicacion.Interfaces.Cliente_Repositorio_Interfaz import IClienteRepositorio
-from Backend.Dominio.Entidades.Cliente_Entidad import ClienteEntidad
+from Backend.Dominio.Entidades.Cliente_Entidad import Cliente
 from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
-from Backend.Aplicacion.Servicios.ObserverService import ObserverService
+from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
 
 class ClienteServicio:
     """
@@ -11,7 +11,7 @@ class ClienteServicio:
     def __init__(self, cliente_repositorio, observer_service=None):
         # Inyección de dependencias (Dependency Injection)
         self.cliente_repositorio = cliente_repositorio
-        self.observer_service = observer_service or ObserverService()
+        self.observer_service = observer_service or ObserverServicio()
     
     def registrar_cliente(self, datos_cliente):
         """
@@ -46,7 +46,7 @@ class ClienteServicio:
             raise ValueError(str(e))
         
         # Crear entidad
-        cliente = ClienteEntidad(
+        cliente = Cliente(
             nombre=datos_cliente['nombre'],
             correo=correo,
             rut=datos_cliente['rut'],

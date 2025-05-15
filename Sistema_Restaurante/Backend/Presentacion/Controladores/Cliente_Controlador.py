@@ -1,19 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import Http404
 
 from Backend.Aplicacion.Servicios.Cliente_Servicio import ClienteServicio
 from Backend.Infraestructura.Repositorios.Cliente_Repositorio import ClienteRepositorio
 from Backend.Presentacion.Serializadores.Cliente_Serializador import ClienteSerializador
 from Backend.Aplicacion.Servicios.ConsoleNotificationObserver import ConsoleNotificationObserver
-from Backend.Aplicacion.Servicios.ObserverService import ObserverService
+from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
 
 class ClienteAPI(APIView):
     """
     API para la gestión de clientes
     """
-    observer_service = ObserverService()
+    observer_service = ObserverServicio()
     observer_registrado = False
 
     def __init__(self, *args, **kwargs):

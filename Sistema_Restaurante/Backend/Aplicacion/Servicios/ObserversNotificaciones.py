@@ -1,4 +1,7 @@
-from Backend.Dominio.Interfaces.INotificationObserver import INotificationObserver
+'''
+Observadores para las notificaciones del sistema.
+'''
+from Sistema_Restaurante.Backend.Aplicacion.Interfaces.INotificationObserver import INotificationObserver
 
 class CocinaNotificationObserver(INotificationObserver):
     def update(self, mensaje: str) -> None:

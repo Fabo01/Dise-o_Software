@@ -1,7 +1,7 @@
 from django.db.models import Q
 from datetime import datetime
 
-from Backend.Dominio.Entidades.Cliente_Entidad import ClienteEntidad
+from Backend.Dominio.Entidades.Cliente_Entidad import Cliente
 from Backend.Infraestructura.Modelos.Cliente_Modelo import ClienteModelo
 
 class ClienteRepositorio:
