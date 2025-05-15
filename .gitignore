@@ -5,6 +5,7 @@ __pycache__/
 *.so
 .Python
 .pytest_cache/
+.pyc
 
 # Entornos virtuales
 env/
@@ -37,3 +38,4 @@ logs/
 # Archivos de configuración local
 .env
 .env.local
+Sistema_Restaurante/Backend/__pycache__/__init__.cpython-312.pyc
