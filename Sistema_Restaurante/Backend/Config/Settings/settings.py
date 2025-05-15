@@ -3,6 +3,9 @@ Configuración de Django para el proyecto Sistema de Restaurante.
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Directorio base
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -64,8 +67,12 @@ WSGI_APPLICATION = 'Backend.Config.wsgi.application'
 # Configuración de base de datos
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'restaurant',
+        'USER': 'restaurant_user',
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),  # Lee la contraseña desde la variable de entorno
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
