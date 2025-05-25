@@ -3,7 +3,7 @@ from datetime import datetime
 
 from Backend.Dominio.Entidades.Usuario_Entidad import UsuarioEntidad
 from Backend.Infraestructura.Modelos.Usuario_Modelo import UsuarioModelo
-from Backend.Aplicacion.Interfaces.Usuario_Repositorio_Interfaz import IUsuarioRepositorio
+from Sistema_Restaurante.Backend.Aplicacion.Interfaces.IUsuario_Repositorio import IUsuarioRepositorio
 
 class UsuarioRepositorio(IUsuarioRepositorio):
     
