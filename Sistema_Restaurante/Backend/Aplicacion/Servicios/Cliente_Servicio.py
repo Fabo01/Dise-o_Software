@@ -1,18 +1,17 @@
-from datetime import datetime
-from Backend.Aplicacion.Interfaces.Cliente_Repositorio_Interfaz import IClienteRepositorio
-from Backend.Dominio.Entidades.Cliente_Entidad import Cliente
 from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
 from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
+from Backend.Dominio.Factories.Cliente_Factory import ClienteFactory  # Importa la factory
 
 class ClienteServicio:
     """
     Servicio que implementa los casos de uso relacionados con la gestión de clientes.
     """
-    def __init__(self, cliente_repositorio, observer_service=None):
+    def __init__(self, cliente_repositorio, observer_service=None, cliente_factory=None):
         # Inyección de dependencias (Dependency Injection)
         self.cliente_repositorio = cliente_repositorio
         self.observer_service = observer_service or ObserverServicio()
-    
+        self.cliente_factory = cliente_factory or ClienteFactory()  # Usa la factory
+
     def registrar_cliente(self, datos_cliente):
         """
         Registra un nuevo cliente en el sistema
@@ -45,10 +44,10 @@ class ClienteServicio:
         except ValueError as e:
             raise ValueError(str(e))
         
-        # Crear entidad
-        cliente = Cliente(
+        # Crear entidad usando la factory
+        cliente = self.cliente_factory.crear(
             nombre=datos_cliente['nombre'],
-            correo=correo,
+            correo=datos_cliente['correo'],
             rut=datos_cliente['rut'],
             telefono=datos_cliente.get('telefono', ''),
             direccion=datos_cliente.get('direccion', ''),

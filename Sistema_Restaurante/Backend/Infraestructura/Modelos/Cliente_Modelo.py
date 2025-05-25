@@ -4,6 +4,7 @@ class ClienteModelo(models.Model):
     """
     Modelo ORM para la tabla Cliente
     """
+    id = models.AutoField(unique=True, verbose_name='Id', primary_key=True)
     rut = models.CharField(max_length=12, unique=True, verbose_name="RUT")
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     telefono = models.CharField(max_length=15, null=True, blank=True, verbose_name="Teléfono")
@@ -20,4 +21,4 @@ class ClienteModelo(models.Model):
         ordering = ["-fecha_registro"]
 
     def __str__(self):
-        return f"{self.nombre} ({self.rut})"
+        return f"{self.nombre} ({self.rut}) {self.fecha_registro}"

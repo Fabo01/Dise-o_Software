@@ -18,6 +18,10 @@ class EntidadBase(IEntidad):
     def id(self) -> Optional[int]:
         return self._id
     
+    @id.setter
+    def id(self, valor):
+        self._id = valor
+        
     @property
     def fecha_creacion(self) -> datetime:
         return self._fecha_creacion

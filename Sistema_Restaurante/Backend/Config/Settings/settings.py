@@ -67,8 +67,8 @@ WSGI_APPLICATION = 'Backend.Config.wsgi.application'
 # Configuración de base de datos
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'restaurant',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'restaurant_db',
         'USER': 'restaurant_user',
         'PASSWORD': os.environ.get('DB_PASSWORD', ''),  # Lee la contraseña desde la variable de entorno
         'HOST': 'localhost',

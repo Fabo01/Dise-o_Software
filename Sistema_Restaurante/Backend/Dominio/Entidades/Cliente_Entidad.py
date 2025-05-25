@@ -5,7 +5,7 @@ from ..Objetos_Valor.RutVO import RutVO
 from ..Objetos_Valor.TelefonoVO import TelefonoVO
 from ..Excepciones.DominioExcepcion import ValidacionExcepcion
 
-class Cliente(EntidadBase):
+class ClienteEntidad(EntidadBase):
     """
     Entidad de dominio que representa un cliente del restaurante.
     Contiene las reglas de negocio y validaciones.
@@ -20,7 +20,8 @@ class Cliente(EntidadBase):
             rut (str): RUT del cliente, debe tener un formato válido
             telefono (str, opcional): Teléfono del cliente
             direccion (str, opcional): Dirección del cliente
-            
+            estado (str, opcional): Estado del cliente, por defecto "activo"
+            ultima_visita (str): Fecha de la ultima visita del cliente
         Raises:
             ValidacionExcepcion: Si los datos proporcionados no son válidos
         """
@@ -32,6 +33,7 @@ class Cliente(EntidadBase):
         self._nombre = nombre
         self._direccion = direccion
         self._ultima_visita = datetime.now()
+        self._estado = "activo"  # Estado inicial
         
         # Usar objetos de valor para validación y encapsulación
         try:
@@ -65,6 +67,18 @@ class Cliente(EntidadBase):
     @property
     def ultima_visita(self):
         return self._ultima_visita
+    
+    @ultima_visita.setter
+    def ultima_visita(self, valor):
+        self._ultima_visita = valor
+    
+    @property
+    def estado(self):
+        return self._estado
+    
+    @estado.setter
+    def estado(self, valor):
+        self._estado = valor
     
     # Métodos de negocio
     def actualizar_datos(self, nombre, correo, telefono=None, direccion=None):

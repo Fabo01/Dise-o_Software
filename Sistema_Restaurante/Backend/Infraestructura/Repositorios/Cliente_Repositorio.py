@@ -1,10 +1,11 @@
 from django.db.models import Q
 from datetime import datetime
 
-from Backend.Dominio.Entidades.Cliente_Entidad import Cliente
+from Backend.Dominio.Entidades.Cliente_Entidad import ClienteEntidad
 from Backend.Infraestructura.Modelos.Cliente_Modelo import ClienteModelo
+from Backend.Aplicacion.Interfaces.ICliente_Repositorio import IClienteRepositorio
 
-class ClienteRepositorio:
+class ClienteRepositorio(IClienteRepositorio):
     """
     Implementación concreta del repositorio de clientes usando Django ORM.
     """
