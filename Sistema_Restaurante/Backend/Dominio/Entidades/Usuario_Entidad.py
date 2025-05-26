@@ -5,19 +5,20 @@ from Backend.Dominio.Entidades.EntidadBase import EntidadBase
 
 
 class UsuarioEntidad(EntidadBase):
-    def __init__(self, username, password, mail, nombre, apellido, rol, telefono, fecha_registro, ultima_sesion):
+    def __init__(self, username, password, email, nombre, apellido, rol, telefono, fecha_registro, ultima_sesion, direccion=None):
         super().__init__()
 
         self._username = username
         self._password = None  # Se setea con set_password
         self.set_password(password)
-        self._mail = mail
+        self._email = email
         self._nombre = nombre
         self._apellido = apellido
         self._rol = rol
         self._telefono = telefono
         self._fecha_registro = fecha_registro
         self._ultima_sesion = ultima_sesion
+        self._direccion = direccion
 
     def set_password(self, raw_password):
         """
@@ -54,12 +55,12 @@ class UsuarioEntidad(EntidadBase):
         self.set_password(valor)
 
     @property
-    def mail(self):
-        return self._mail
+    def email(self):
+        return self._email
 
-    @mail.setter
-    def mail(self, valor):
-        self._mail = valor
+    @email.setter
+    def email(self, valor):
+        self._email = valor
 
     @property
     def nombre(self):
@@ -108,4 +109,12 @@ class UsuarioEntidad(EntidadBase):
     @ultima_sesion.setter
     def ultima_sesion(self, valor):
         self._ultima_sesion = valor
+
+    @property
+    def direccion(self):
+        return self._direccion
+
+    @direccion.setter
+    def direccion(self, valor):
+        self._direccion = valor
 

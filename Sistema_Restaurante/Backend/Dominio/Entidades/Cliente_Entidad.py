@@ -100,7 +100,12 @@ class ClienteEntidad(EntidadBase):
         self._nombre = nombre
         
         try:
-            self._correo = CorreoVO(correo)
+            # Permitir que 'correo' sea str o CorreoVO
+            if isinstance(correo, CorreoVO):
+                correo_valor = correo.valor
+            else:
+                correo_valor = correo
+            self._correo = CorreoVO(correo_valor)
             
             if telefono is not None:
                 self._telefono = TelefonoVO(telefono)

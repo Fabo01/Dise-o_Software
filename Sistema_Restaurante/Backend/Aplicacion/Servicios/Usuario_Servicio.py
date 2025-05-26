@@ -14,7 +14,7 @@ class UsuarioServicio:
         self.usuario_factory = UsuarioFactory()
 
     def registrar_usuario(self, datos_usuario):
-        usuario = self.usuario_factory.crear_usuario(**datos_usuario)
+        usuario = self.usuario_factory.crear(**datos_usuario)
         self.usuario_repositorio.guardar(usuario)
         self.observer_service.notificar("Usuario registrado", usuario)
 
@@ -54,6 +54,6 @@ class UsuarioServicio:
             raise ValueError("Contraseña incorrecta")
         self.observer_service.notificar("Usuario autenticado", usuario)
         return usuario
-        
 
-    
+
+

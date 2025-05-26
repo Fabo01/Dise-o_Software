@@ -5,7 +5,7 @@ class UsuarioDTO(BaseModel):
     id: Optional[int]
     username: Optional[str] = None  # Ahora es opcional, se autogenera
     password: str
-    mail: str
+    email: str
     nombre: str
     apellido: str
     rol: Optional[str] = None

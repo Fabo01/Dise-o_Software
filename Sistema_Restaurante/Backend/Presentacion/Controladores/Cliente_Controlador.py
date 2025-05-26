@@ -57,7 +57,12 @@ class ClienteAPI(APIView):
                     clientes = self.servicio_cliente.buscar_clientes_por_nombre(nombre)
                 else:
                     clientes = self.servicio_cliente.listar_clientes(solo_activos)
-                    
+                
+                # Asegurarse de que 'clientes' sea una lista, no un set ni queryset
+                if isinstance(clientes, set):
+                    clientes = list(clientes)
+                elif not isinstance(clientes, list):
+                    clientes = list(clientes)
                 serializer = ClienteSerializador(clientes, many=True)
                 return Response(serializer.data)
             except Exception as e:

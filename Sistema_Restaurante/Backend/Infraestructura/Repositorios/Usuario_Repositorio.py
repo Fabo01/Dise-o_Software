@@ -3,7 +3,7 @@ from datetime import datetime
 
 from Backend.Dominio.Entidades.Usuario_Entidad import UsuarioEntidad
 from Backend.Infraestructura.Modelos.Usuario_Modelo import UsuarioModelo
-from Sistema_Restaurante.Backend.Aplicacion.Interfaces.IUsuario_Repositorio import IUsuarioRepositorio
+from Backend.Aplicacion.Interfaces.IUsuario_Repositorio import IUsuarioRepositorio
 
 class UsuarioRepositorio(IUsuarioRepositorio):
     
@@ -12,7 +12,7 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             usuario_modelo = UsuarioModelo.get(id=usuario.id)
             usuario_modelo.username = usuario.username
             usuario_modelo.password = usuario.password
-            usuario_modelo.mail = usuario.mail
+            usuario_modelo.email = usuario.email
             usuario_modelo.nombre = usuario.nombre
             usuario_modelo.apellido = usuario.apellido
             usuario_modelo.rol = usuario.rol
@@ -24,7 +24,7 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             usuario_modelo = UsuarioModelo.objects.create(
                 username=usuario.username,
                 password=usuario.password,
-                mail=usuario.mail,
+                email=usuario.email,
                 nombre=usuario.nombre,
                 apellido=usuario.apellido,
                 rol=usuario.rol,
@@ -66,7 +66,7 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             id=usuario_modelo.id,
             username=usuario_modelo.username,
             password=usuario_modelo.password,
-            mail=usuario_modelo.mail,
+            email=usuario_modelo.email,
             nombre=usuario_modelo.nombre,
             apellido=usuario_modelo.apellido,
             rol=usuario_modelo.rol,

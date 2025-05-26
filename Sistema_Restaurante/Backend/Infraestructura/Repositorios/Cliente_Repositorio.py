@@ -99,3 +99,10 @@ class ClienteRepositorio(IClienteRepositorio):
         cliente.fecha_registro = cliente_modelo.fecha_registro
         cliente.ultima_visita = cliente_modelo.ultima_visita
         return cliente
+
+    def buscar_por_nombre(self, nombre):
+        """
+        Busca clientes que contengan el nombre especificado (case-insensitive)
+        """
+        clientes_modelo = ClienteModelo.objects.filter(nombre__icontains=nombre)
+        return [self._convertir_a_entidad(cliente) for cliente in clientes_modelo]

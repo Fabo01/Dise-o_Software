@@ -17,8 +17,8 @@ class ObserverServicio:
         Args:
             observer (INotificationObserver): El observador a registrar.
         '''
-        if observer not in self._observer:
-            self._observer.append(observer)
+        if observer not in self._observers:
+            self._observers.append(observer)
 
     def eliminar_observador(self, observer: INotificationObserver) -> None:
         '''
@@ -62,7 +62,7 @@ class ObserverServicio:
         Argumentos:
             mensaje (str): El mensaje a enviar a los observadores.
         '''
-        for observer in self._observer:
+        for observer in self._observers:
             observer.update(mensaje)
     
     def notificar_evento(self, evento: str, mensaje: str) -> None:

@@ -45,6 +45,12 @@ class CorreoVO:
             str: La dirección de correo
         """
         return self._direccion
+
+    def __str__(self):
+        """
+        Retorna la representación en string del objeto CorreoVO.
+        """
+        return self._direccion
         
     def es_dominio(self, dominio):
         """
