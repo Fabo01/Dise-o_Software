@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from Backend.Infraestructura.Modelos.Rol_Modelo import RolModelo
 
 class UsuarioModelo(models.Model):
     """
