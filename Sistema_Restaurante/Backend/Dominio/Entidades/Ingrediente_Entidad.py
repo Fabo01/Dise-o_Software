@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from .EntidadBase import EntidadBase
 from ..Excepciones.DominioExcepcion import ValidacionExcepcion
 
-class Ingrediente(EntidadBase):
+class IngredienteEntidad(EntidadBase):
     """
     Clase que representa un ingrediente en el sistema de restaurante.
     
@@ -16,7 +16,7 @@ class Ingrediente(EntidadBase):
         tipo (str): Categoría del ingrediente (ej. proteína, vegetal, lácteo).
     """
     
-    def __init__(self, nombre, cantidad, unidad_medida, fecha_vencimiento, nivel_critico=None, tipo=None):
+    def __init__(self, nombre, cantidad, unidad_medida, fecha_vencimiento, nivel_critico=None, tipo=None, imagen=None):
         super().__init__()
         
         if not nombre:
@@ -34,6 +34,7 @@ class Ingrediente(EntidadBase):
         self._fecha_registro = datetime.now()
         self._nivel_critico = nivel_critico
         self._tipo = tipo
+        self._imagen = imagen
     
     # Propiedades (getters)
     @property
@@ -67,6 +68,14 @@ class Ingrediente(EntidadBase):
     @property
     def tipo(self):
         return self._tipo
+    
+    @property
+    def imagen(self):
+        return self._imagen
+    
+    @imagen.setter
+    def imagen(self, valor):
+        self._imagen = valor
     
     # Métodos de negocio
     def verificar_disponibilidad(self, cantidad_requerida):

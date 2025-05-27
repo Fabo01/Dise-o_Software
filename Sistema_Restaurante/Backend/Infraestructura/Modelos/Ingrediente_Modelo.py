@@ -8,7 +8,7 @@ class IngredienteModelo(models.Model):
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     cantidad = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Cantidad")
     categoria = models.CharField(max_length=50, verbose_name="Categoría")
-    imagen = models.ImageField(upload_to='ingredientes/', null=True, blank=True, verbose_name="Imagen")
+    imagen = models.ImageField(upload_to='Imagenes/Ingredientes/', null=True, blank=True, verbose_name="Imagen")
     unidad_medida = models.CharField(max_length=20, verbose_name="Unidad de Medida")
     fecha_vencimiento = models.DateField(verbose_name="Fecha de Vencimiento", null=True, blank=True)
     estado = models.CharField(max_length=20, default="activo", verbose_name="Estado")
