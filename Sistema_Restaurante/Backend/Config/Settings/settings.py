@@ -69,7 +69,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'restaurant_db',
-        'USER': 'restaurant_user',
+        'USER': 'admin',
         'PASSWORD': os.environ.get('DB_PASSWORD', ''),  # Lee la contraseña desde la variable de entorno
         'HOST': 'localhost',
         'PORT': '5432',

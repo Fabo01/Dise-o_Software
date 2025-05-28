@@ -18,5 +18,4 @@ class UsuarioSerializador(serializers.ModelSerializer):
         data['email'] = str(data.get('email', ''))
         # Asegura que 'telefono' tenga un valor por defecto
         data['telefono'] = data.get('telefono', '') or ''
-        data['direccion'] = data.get('direccion', '') or ''
         return data

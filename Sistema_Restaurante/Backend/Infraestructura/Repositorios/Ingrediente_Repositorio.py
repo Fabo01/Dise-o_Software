@@ -134,7 +134,6 @@ class IngredienteRepositorio(IIngrediente_Repositorio):
         Convierte un modelo de ingrediente a una entidad de dominio
         """
         return IngredienteEntidad(
-            id=ingrediente_modelo.id,
             nombre=ingrediente_modelo.nombre,
             cantidad=ingrediente_modelo.cantidad,
             unidad_medida=ingrediente_modelo.unidad_medida,

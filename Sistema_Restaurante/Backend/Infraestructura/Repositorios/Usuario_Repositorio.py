@@ -63,7 +63,6 @@ class UsuarioRepositorio(IUsuarioRepositorio):
         
     def _convertir_a_entidad(self, usuario_modelo):
         return UsuarioEntidad(
-            id=usuario_modelo.id,
             username=usuario_modelo.username,
             password=usuario_modelo.password,
             email=usuario_modelo.email,
@@ -72,5 +71,6 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             rol=usuario_modelo.rol,
             telefono=usuario_modelo.telefono,
             fecha_registro=usuario_modelo.fecha_registro,
-            ultima_sesion=usuario_modelo.ultima_sesion
+            ultima_sesion=usuario_modelo.ultima_sesion,
+            direccion=usuario_modelo.direccion or ''
         )

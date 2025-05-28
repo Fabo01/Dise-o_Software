@@ -1,4 +1,4 @@
-from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
+from Backend.Dominio.objetos_valor.Correo_VO import CorreoVO
 from Backend.Infraestructura.Repositorios.Usuario_Repositorio import UsuarioRepositorio
 from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
 from Backend.Dominio.Factories.Usuario_Factory import UsuarioFactory  # Importa la factory
