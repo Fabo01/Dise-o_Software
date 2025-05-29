@@ -1,6 +1,6 @@
 import re
 
-class Rut:
+class Rut:   
     @staticmethod
     def validar(rut: str) -> bool:
         """Valida un RUT chileno (formato: XXXXXXXX-Y o XX.XXX.XXX-Y)"""
@@ -13,12 +13,15 @@ class Rut:
         multiplo = 2
         for c in reversed(cuerpo):
             suma += int(c) * multiplo
-            multiplo = 9 if multiplo == 2 else multiplo - 1
-            multiplo = 2 if multiplo < 2 else multiplo
+            multiplo += 1
+            if multiplo > 7:
+                multiplo = 2
         resto = suma % 11
-        dv_esperado = str(11 - resto) if 11 - resto != 11 else '0'
-        if dv == 'K':
-            dv = 'k'
-        if dv == 'K' or dv == 'k':
-            dv_esperado = 'K' if 11 - resto == 10 else dv_esperado
-        return dv == str(dv_esperado)
+        dv_esperado = 11 - resto
+        if dv_esperado == 11:
+            dv_esperado = '0'
+        elif dv_esperado == 10:
+            dv_esperado = 'K'
+        else:
+            dv_esperado = str(dv_esperado)
+        return dv == dv_esperado

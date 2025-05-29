@@ -14,7 +14,7 @@ def no_existe_usuario(username, limpiar_usuarios):
 
 @given(parsers.parse('que existe un usuario con username "{username}"'))
 def existe_usuario(username, db):
-    UsuarioModelo.objects.create(username=username, nombre="Test", rol="mesero", email=f"{username}@mail.com")
+    UsuarioModelo.objects.create(rut="21533873-8", username=username, nombre="Test", rol="mesero", email=f"{username}@mail.com", password="1234")
     assert UsuarioModelo.objects.filter(username=username).exists()
 
 @given(parsers.parse('que existe un usuario con rut "{rut}"'))
@@ -24,13 +24,13 @@ def existe_usuario_rut(rut, db):
 
 @given('que existen usuarios registrados')
 def existen_usuarios_registrados(db):
-    UsuarioModelo.objects.create(rut="12345678-9", username="ana", nombre="Ana", rol="mesero", email="ana@mail.com", password="1234")
-    UsuarioModelo.objects.create(rut="98765432-1", username="luis", nombre="Luis", rol="cocinero", email="luis@mail.com", password="1234")
+    UsuarioModelo.objects.create(rut="21533876-2", username="ana", nombre="Ana", rol="mesero", email="ana@mail.com", password="1234")
+    UsuarioModelo.objects.create(rut="21533875-4", username="luis", nombre="Luis", rol="cocinero", email="luis@mail.com", password="1234")
     assert UsuarioModelo.objects.count() >= 2
 
 @when(parsers.parse('creo un usuario con username "{username}", nombre "{nombre}", rol "{rol}"'))
 def crear_usuario(username, nombre, rol, db):
-    UsuarioModelo.objects.create(username=username, nombre=nombre, rol=rol)
+    UsuarioModelo.objects.create(rut="21533873-8", username=username, nombre=nombre, rol=rol, email=f"{username}@mail.com", password="1234")
 
 @when(parsers.parse('creo un usuario con rut "{rut}", nombre "{nombre}", rol "{rol}"'))
 def crear_usuario_rut(rut, nombre, rol, db):

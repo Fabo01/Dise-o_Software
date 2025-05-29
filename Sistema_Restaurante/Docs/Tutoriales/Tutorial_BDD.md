@@ -33,12 +33,12 @@ Las pruebas BDD se encuentran en:
 ## 3. Ejecución de los tests
 Ubícate en la carpeta `Sistema_Restaurante` 
 
-```
+```bash
 cd "C:\Users\fabo\Documents\Git Universidad\Dise-o_Software\Sistema_Restaurante"
 ```
 y ejecuta:
 
-```powershell
+```bash
 pytest
 ```
 
