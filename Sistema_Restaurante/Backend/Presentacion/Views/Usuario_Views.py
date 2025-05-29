@@ -20,7 +20,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         try:
             usuario = UsuarioServicio(UsuarioRepositorio()).registrar_usuario(serializer.validated_data)
             return Response(
-                UsuarioSerializador(UsuarioModelo.objects.get(id=usuario.id)).data,
+                UsuarioSerializador(usuario).data,
                 status=status.HTTP_201_CREATED
             )
         except ValueError as e:

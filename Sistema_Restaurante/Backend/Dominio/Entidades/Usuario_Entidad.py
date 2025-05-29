@@ -126,27 +126,40 @@ class UsuarioEntidad(EntidadBase):
     def rut(self):
         return self._rut  # RUT es ahora un objeto de valor inmutable
 
-    def actualizar_datos(self, nombre=None, apellido=None, email=None, telefono=None, rol=None, direccion=None):
+    def actualizar_datos(self, username, email, telefono=None, direccion=None):
         """
-        Actualiza los datos del usuario de forma segura, similar a ClienteEntidad.
+        Actualiza los datos del cliente
+        
+        Args:
+            nombre (str): Nuevo nombre
+            email (str): Nuevo correo
+            telefono (str, opcional): Nuevo teléfono
+            direccion (str, opcional): Nueva dirección
+            
+        Raises:
+            ValidacionExcepcion: Si los datos proporcionados no son válidos
         """
-        if nombre is not None:
-            self._nombre = nombre
-        if apellido is not None:
-            self._apellido = apellido
-        if email is not None:
-            try:
-                self._email = CorreoVO(email)
-            except ValueError as e:
-                raise ValidacionExcepcion(str(e))
-        if telefono is not None:
-            try:
+        if not username:
+            raise ValidacionExcepcion("El nombre es obligatorio")
+        
+        self._username = username
+        
+        try:
+            # Permitir que 'email' sea str o CorreoVO
+            if isinstance(email, CorreoVO):
+                email_valor = email.valor
+            else:
+                email_valor = email
+            self._email = CorreoVO(email_valor)
+            
+            if telefono is not None:
                 self._telefono = TelefonoVO(telefono)
-            except ValueError as e:
-                raise ValidacionExcepcion(str(e))
-        if rol is not None:
-            self._rol = rol
-        if direccion is not None:
-            self._direccion = direccion
-        self.actualizar_fecha()
+            
+            if direccion is not None:
+                self._direccion = direccion
+                
+            self.actualizar_fecha()
+        except ValueError as e:
+            raise ValidacionExcepcion(str(e))
+    
 
