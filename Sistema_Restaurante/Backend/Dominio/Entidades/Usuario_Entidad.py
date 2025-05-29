@@ -2,23 +2,29 @@ from datetime import datetime
 import bcrypt
 
 from Backend.Dominio.Entidades.EntidadBase import EntidadBase
+from Backend.Dominio.objetos_valor.Correo_VO import CorreoVO
+from Backend.Dominio.objetos_valor.TelefonoVO import TelefonoVO
+from ..Excepciones.DominioExcepcion import ValidacionExcepcion
 
 
 class UsuarioEntidad(EntidadBase):
     def __init__(self, username, password, email, nombre, apellido, rol, telefono, fecha_registro, ultima_sesion, direccion=None):
         super().__init__()
-
         self._username = username
-        self._password = None  # Se setea con set_password
-        self.set_password(password)
-        self._email = email
+        self._password = None  # Se setea con el setter
+        self.password = password  # Usar el setter para decidir si encriptar o no
         self._nombre = nombre
         self._apellido = apellido
         self._rol = rol
-        self._telefono = telefono
         self._fecha_registro = fecha_registro
         self._ultima_sesion = ultima_sesion
         self._direccion = direccion
+
+        try:
+            self._email = CorreoVO(email)
+            self._telefono = TelefonoVO(telefono)
+        except ValueError as e:
+            raise ValidacionExcepcion(str(e))
 
     def set_password(self, raw_password):
         """
@@ -30,13 +36,17 @@ class UsuarioEntidad(EntidadBase):
             raw_password = raw_password.encode('utf-8')
         self._password = bcrypt.hashpw(raw_password, bcrypt.gensalt()).decode('utf-8')
 
-    def check_password(self, raw_password):
-        """
-        Verifica si la contraseña ingresada coincide con el hash almacenado.
-        """
-        if not isinstance(raw_password, bytes):
-            raw_password = raw_password.encode('utf-8')
-        return bcrypt.checkpw(raw_password, self._password.encode('utf-8'))
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, valor):
+        # Si ya está encriptada (empieza con $2b$), no volver a encriptar
+        if isinstance(valor, str) and valor.startswith("$2b$"):
+            self._password = valor
+        else:
+            self.set_password(valor)
 
     @property
     def username(self):
@@ -45,14 +55,6 @@ class UsuarioEntidad(EntidadBase):
     @username.setter
     def username(self, valor):
         self._username = valor
-
-    @property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, valor):
-        self.set_password(valor)
 
     @property
     def email(self):
@@ -117,4 +119,36 @@ class UsuarioEntidad(EntidadBase):
     @direccion.setter
     def direccion(self, valor):
         self._direccion = valor
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, valor):
+        self._id = valor
+
+    def actualizar_datos(self, nombre=None, apellido=None, email=None, telefono=None, rol=None, direccion=None):
+        """
+        Actualiza los datos del usuario de forma segura, similar a ClienteEntidad.
+        """
+        if nombre is not None:
+            self._nombre = nombre
+        if apellido is not None:
+            self._apellido = apellido
+        if email is not None:
+            try:
+                self._email = CorreoVO(email)
+            except ValueError as e:
+                raise ValidacionExcepcion(str(e))
+        if telefono is not None:
+            try:
+                self._telefono = TelefonoVO(telefono)
+            except ValueError as e:
+                raise ValidacionExcepcion(str(e))
+        if rol is not None:
+            self._rol = rol
+        if direccion is not None:
+            self._direccion = direccion
+        self.actualizar_fecha()
 

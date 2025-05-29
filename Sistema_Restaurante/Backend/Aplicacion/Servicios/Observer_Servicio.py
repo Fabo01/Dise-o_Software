@@ -56,14 +56,14 @@ class ObserverServicio:
             if not self._event_observers[evento]:
                 del self._event_observers[evento]
 
-    def notificar(self, mensaje: str) -> None:
+    def notificar(self, mensaje: str, data=None) -> None:
         '''
         Notifica a todos los observadores registrados.
         Argumentos:
             mensaje (str): El mensaje a enviar a los observadores.
         '''
         for observer in self._observers:
-            observer.update(mensaje)
+            observer.update(mensaje, data)
     
     def notificar_evento(self, evento: str, mensaje: str) -> None:
         '''

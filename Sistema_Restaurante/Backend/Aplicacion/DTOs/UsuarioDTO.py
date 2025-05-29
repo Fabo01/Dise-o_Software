@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class UsuarioDTO(BaseModel):
-    id: Optional[int]
+    id: int
     username: Optional[str] = None  # Ahora es opcional, se autogenera
     password: str
     email: str
@@ -11,6 +11,7 @@ class UsuarioDTO(BaseModel):
     rol: Optional[str] = None
     telefono: str
     estado: Optional[str] = 'Activo'
+    direccion: Optional[str] = None
 
     class Config:
         orm_mode = True

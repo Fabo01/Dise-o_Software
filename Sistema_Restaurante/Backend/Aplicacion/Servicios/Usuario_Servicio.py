@@ -19,7 +19,10 @@ class UsuarioServicio:
         self.observer_service.notificar("Usuario registrado", usuario)
 
     def obtener_usuario(self, id):
-        return self.usuario_repositorio.buscar_por_id(id)
+        usuario = self.usuario_repositorio.buscar_por_id(id)
+        if usuario is None:
+            raise ValueError("Usuario no encontrado")
+        return usuario
     
     def buscar_usuario_por_correo(self, correo):
         return self.usuario_repositorio.buscar_por_correo(correo)
@@ -35,12 +38,22 @@ class UsuarioServicio:
     
     def actualizar_usuario(self, id, datos_usuario):
         usuario = self.usuario_repositorio.buscar_por_id(id)
-        if not usuario:
+        if usuario is None:
             raise ValueError("Usuario no encontrado")
         
-        for key, value in datos_usuario.items():
-            setattr(usuario, key, value)
-        
+        # Actualiza solo los campos permitidos usando el método de la entidad
+        usuario.actualizar_datos(
+            nombre=datos_usuario.get('nombre'),
+            apellido=datos_usuario.get('apellido'),
+            email=datos_usuario.get('email'),
+            telefono=datos_usuario.get('telefono'),
+            rol=datos_usuario.get('rol'),
+            direccion=datos_usuario.get('direccion')
+        )
+        # Si se quiere actualizar la contraseña:
+        if 'password' in datos_usuario and datos_usuario['password']:
+            usuario.password = datos_usuario['password']
+
         self.usuario_repositorio.guardar(usuario)
         self.observer_service.notificar("Usuario actualizado", usuario)
         return usuario

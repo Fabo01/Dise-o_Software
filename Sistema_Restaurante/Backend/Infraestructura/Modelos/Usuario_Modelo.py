@@ -13,7 +13,7 @@ class UsuarioModelo(models.Model):
     apellido = models.CharField(max_length=100, verbose_name='Apellido')
     rol = models.CharField(max_length=100, null=True, verbose_name='Rol')
     email = models.EmailField(unique=True, verbose_name='Email')
-    telefono = models.CharField(max_length=15, null=True, blank=True, verbose_name='Teléfono')
+    telefono = models.CharField(max_length=15, null=True, blank=True, verbose_name="Teléfono")
     direccion = models.CharField(max_length=100, verbose_name='Dirección', null=True)
     ultima_sesion = models.DateTimeField(default=timezone.now, verbose_name='Ultima Sesión')
     class Meta:
