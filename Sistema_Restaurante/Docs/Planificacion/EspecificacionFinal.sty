@@ -1,0 +1,866 @@
+\documentclass{article}
+\setlength{\headheight}{14.49998pt}
+\addtolength{\topmargin}{-2.49998pt}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Sistema de Gestión de Restaurantes}
+\rhead{Especificación de Requisitos}
+
+\title{Especificación de Requisitos de Software (SRS)}
+\author{Eclaviza Rappi}
+\date{Abril 2025}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introducción}
+\subsection{Propósito}
+Este documento tiene como objetivo definir y documentar de forma clara y detallada los requisitos del Sistema de Gestión de Clientes y Pedidos en un Restaurante. Servirá como base para la planificación, diseño, desarrollo, validación y mantenimiento del sistema, dirigido a desarrolladores, evaluadores y stakeholders del proyecto.
+
+\subsection{Alcance}
+El sistema es una aplicación web destinada a modernizar la gestión operativa de restaurantes, migrando de una solución actual de escritorio (Python + customtkinter) a una plataforma web moderna (React + Django). El sistema permitirá:
+\begin{itemize}
+  \item Gestionar clientes y sus pedidos.
+  \item Administrar inventario de ingredientes.
+  \item Crear y actualizar menús vinculados a los ingredientes disponibles.
+  \item Gestionar mesas y tiempos de ocupación.
+  \item Generar reportes analíticos para la toma de decisiones.
+  \item Implementar un sistema de delivery para expandir canales de venta.
+  \item Administrar diferentes medios de pago y comprobantes.
+\end{itemize}
+
+La transformación no solo modernizará la infraestructura tecnológica, sino que también transformará fundamentalmente el modelo operativo del restaurante, mejorando la eficiencia, reduciendo costos y aumentando la satisfacción del cliente.
+
+\subsection{Definiciones, Acrónimos y Abreviaturas}
+\begin{itemize}
+  \item \textbf{SRS}: Software Requirements Specification (Especificación de Requisitos de Software).
+  \item \textbf{RF}: Requisito Funcional.
+  \item \textbf{RNF}: Requisito No Funcional.
+  \item \textbf{GUI}: Graphical User Interface (Interfaz Gráfica de Usuario).
+  \item \textbf{API}: Application Programming Interface (Interfaz de Programación de Aplicaciones).
+  \item \textbf{CRUD}: Create, Read, Update, Delete (Crear, Leer, Actualizar, Eliminar) - Operaciones básicas sobre datos.
+  \item \textbf{ORM}: Object-Relational Mapping (Mapeo Objeto-Relacional).
+  \item \textbf{JWT}: JSON Web Token - Estándar para la creación de tokens de acceso.
+  \item \textbf{KPI}: Key Performance Indicator (Indicador Clave de Desempeño).
+  \item \textbf{Stock}: Cantidad disponible de un ingrediente en el inventario.
+  \item \textbf{Delivery}: Servicio de entrega de pedidos a domicilio.
+  \item \textbf{Frontend}: Parte del sistema con la que interactúan directamente los usuarios.
+  \item \textbf{Backend}: Parte del sistema que procesa las operaciones y gestiona los datos.
+\end{itemize}
+
+\subsection{Referencias}
+\begin{itemize}
+  \item IEEE Std 830-1998, \emph{Recommended Practice for Software Requirements Specifications}.
+  \item Documentación del sistema actual de escritorio en Python.
+  \item Diagramas de Casos de Uso del sistema actual y refactorizado.
+  \item Casos de Uso Extendidos - Documentación detallada de flujos de trabajo.
+  \item Sistematización del Proyecto - Análisis de la situación sin y con proyecto.
+  \item Convenciones de Código y Estructura del Proyecto.
+  \item Backlog de tareas para el desarrollo del proyecto.
+\end{itemize}
+
+\subsection{Visión General del Documento}
+Este documento se estructura en las siguientes secciones:
+\begin{itemize}
+  \item \textbf{Introducción}: Contexto, propósito y alcance del documento.
+  \item \textbf{Descripción General}: Visión de alto nivel del sistema y sus características.
+  \item \textbf{Requisitos Específicos}: Detalle de los requisitos funcionales y no funcionales.
+  \item \textbf{Modelo de Datos}: Estructura de almacenamiento y relaciones entre entidades.
+  \item \textbf{Arquitectura del Sistema}: Componentes principales y relaciones entre ellos.
+  \item \textbf{Límites del Sistema}: Alcance y restricciones funcionales y técnicas.
+  \item \textbf{Planificación del Proyecto}: Metodología, cronograma y organización del trabajo.
+  \item \textbf{Resultados Esperados}: Beneficios y entregables concretos del proyecto.
+  \item \textbf{Apéndices}: Información complementaria, glosario y diagramas.
+\end{itemize}
+
+\section{Descripción General}
+\subsection{Perspectiva del Producto}
+El sistema es una aplicación cliente-servidor distribuida que se integrará a la infraestructura existente del restaurante. Permitirá acceso desde múltiples dispositivos y ubicaciones, optimizando la operación diaria y mejorando la experiencia del cliente.
+
+El sistema refactorizado sigue un enfoque de arquitectura limpia (Clean Architecture) que separa claramente las capas de:
+\begin{itemize}
+  \item \textbf{Presentación}: Interfaces de usuario en React y controladores de API.
+  \item \textbf{Casos de Uso}: Lógica de negocio específica de la aplicación.
+  \item \textbf{Dominio}: Entidades y reglas de negocio core.
+  \item \textbf{Infraestructura}: Acceso a datos, frameworks y servicios externos.
+\end{itemize}
+
+Esta arquitectura mejora significativamente respecto al sistema actual, que tiene una estructura monolítica con acoplamiento fuerte entre interfaz y lógica de negocio.
+
+\subsection{Funcionalidad del Producto}
+El sistema permitirá:
+
+\subsubsection{Gestión de Clientes}
+\begin{itemize}
+  \item Registro y actualización de datos personales.
+  \item Búsqueda avanzada por diferentes criterios.
+  \item Historial de pedidos y preferencias.
+  \item Gestión descentralizada que permite a meseros crear y actualizar datos.
+\end{itemize}
+
+\subsubsection{Gestión de Inventario}
+\begin{itemize}
+  \item Control detallado de ingredientes con alertas de stock.
+  \item Actualización en tiempo real al procesar pedidos.
+  \item Categorización y trazabilidad de ingredientes.
+  \item Informes de uso y tendencias de consumo.
+\end{itemize}
+
+\subsubsection{Gestión de Menús}
+\begin{itemize}
+  \item Creación y actualización de platos con sus ingredientes.
+  \item Cálculo automático de costos y márgenes de beneficio.
+  \item Verificación automática de disponibilidad según stock.
+  \item Categorización y personalización de platos.
+\end{itemize}
+
+\subsubsection{Gestión de Pedidos}
+\begin{itemize}
+  \item Creación, modificación y cancelación de pedidos.
+  \item Seguimiento del estado en tiempo real.
+  \item Comunicación directa entre servicio y cocina.
+  \item Notificaciones automáticas sobre cambios de estado.
+\end{itemize}
+
+\subsubsection{Gestión de Mesas}
+\begin{itemize}
+  \item Visualización gráfica del estado de las mesas.
+  \item Control de tiempos de ocupación y rotación.
+  \item Asignación óptima según tamaño de grupos.
+  \item Estadísticas de uso y eficiencia.
+\end{itemize}
+
+\subsubsection{Sistema de Delivery}
+\begin{itemize}
+  \item Registro y seguimiento de pedidos a domicilio.
+  \item Integración con plataformas externas de delivery.
+  \item Asignación y seguimiento de repartidores.
+  \item Gestión de zonas de cobertura y tiempos de entrega.
+\end{itemize}
+
+\subsubsection{Sistema de Pagos}
+\begin{itemize}
+  \item Procesamiento de múltiples medios de pago.
+  \item Generación de comprobantes fiscales.
+  \item División de cuentas y propinas.
+  \item Registro histórico de transacciones.
+\end{itemize}
+
+\subsubsection{Reportes Analíticos}
+\begin{itemize}
+  \item Dashboard interactivo con KPIs del negocio.
+  \item Visualización de tendencias y patrones.
+  \item Exportación de informes en múltiples formatos.
+  \item Análisis predictivo de demanda y stock necesario.
+\end{itemize}
+
+\subsection{Características de los Usuarios}
+El sistema contempla los siguientes roles de usuario:
+
+\begin{itemize}
+  \item \textbf{Jefe de Local (Administrador):} Acceso completo a todas las funcionalidades del sistema. Responsable de la configuración, parametrización y supervisión general. Tiene acceso a 33 casos de uso (100\% del sistema).
+  
+  \item \textbf{Jefe de Turno:} Responsable de la operación diaria y análisis de datos. Acceso a funcionalidades administrativas pero con ciertas restricciones en configuración. Tiene acceso a 17 casos de uso (52\% del sistema).
+  
+  \item \textbf{Mesero:} Personal encargado de atender a los clientes, tomar pedidos y gestionar mesas. Acceso a funcionalidades de servicio y atención al cliente. Tiene acceso a 16 casos de uso (48\% del sistema).
+  
+  \item \textbf{Cocina:} Personal encargado de preparar los pedidos y gestionar ingredientes. Acceso limitado a visualización de pedidos e inventario. Tiene acceso a 6 casos de uso (18\% del sistema).
+\end{itemize}
+
+Esta distribución de roles y permisos representa una mejora significativa respecto al sistema actual, donde todas las operaciones están centralizadas en el Jefe de Local.
+
+\subsection{Restricciones}
+\begin{itemize}
+  \item \textbf{Tecnológicas:} El sistema debe utilizar React para el frontend y Django para el backend.
+  \item \textbf{Seguridad:} Implementación de autenticación JWT, encriptación de datos sensibles y protección contra ataques comunes.
+  \item \textbf{Rendimiento:} El sistema debe procesar operaciones estándar en menos de 3 segundos.
+  \item \textbf{Conectividad:} El sistema debe funcionar en entornos con conectividad intermitente, manejando operaciones offline cuando sea necesario.
+  \item \textbf{Legales:} Cumplimiento con normativas de protección de datos personales y requisitos fiscales para la emisión de comprobantes.
+  \item \textbf{Hardware:} Compatibilidad con dispositivos móviles y tablets para el personal de servicio.
+\end{itemize}
+
+\subsection{Suposiciones y Dependencias}
+\begin{itemize}
+  \item \textbf{Suposiciones:}
+  \begin{itemize}
+    \item Los usuarios tendrán capacitación básica en tecnología.
+    \item El restaurante cuenta con una red Wi-Fi estable.
+    \item El volumen de datos no excederá inicialmente los 10GB.
+    \item Los picos de carga no superarán 100 usuarios concurrentes en la primera fase.
+  \end{itemize}
+  
+  \item \textbf{Dependencias:}
+  \begin{itemize}
+    \item Disponibilidad continua del servidor de base de datos PostgreSQL.
+    \item Integración con servicios de pago electrónico de terceros.
+    \item APIs de plataformas de delivery para la integración de pedidos externos.
+    \item Servicio de mapas para visualización de rutas de entrega.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Requisitos Futuros}
+\begin{itemize}
+  \item Aplicación móvil dedicada para clientes finales.
+  \item Sistema de fidelización con puntos y recompensas.
+  \item Integración con sistemas de reserva online.
+  \item Módulo de gestión de proveedores y compras.
+  \item Análisis predictivo de demanda basado en históricos y factores externos.
+  \item Integración con sistemas de marketing digital.
+\end{itemize}
+
+\section{Requisitos Específicos}
+\subsection{Requisitos Funcionales (RF)}
+
+\subsubsection{RF-1: Gestión de Clientes}
+\begin{itemize}
+  \item \textbf{Descripción:} Permitir el registro, edición y eliminación de clientes.
+  \item \textbf{Entrada:} Datos del cliente (nombre, email, teléfono, dirección).
+  \item \textbf{Proceso:} Validación de datos, verificación de duplicados, almacenamiento en base de datos.
+  \item \textbf{Salida:} Confirmación de la acción o mensaje de error.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno, Mesero.
+\end{itemize}
+
+\subsubsection{RF-2: Gestión de Inventario}
+\begin{itemize}
+  \item \textbf{Descripción:} Registrar y actualizar el stock de ingredientes.
+  \item \textbf{Entrada:} Datos del ingrediente (nombre, tipo, cantidad, unidad).
+  \item \textbf{Proceso:} Validación de datos, actualización de inventario, generación de alertas.
+  \item \textbf{Salida:} Confirmación de la acción o alerta de stock crítico.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno, Cocina.
+\end{itemize}
+
+\subsubsection{RF-3: Gestión de Pedidos}
+\begin{itemize}
+  \item \textbf{Descripción:} Crear y gestionar pedidos asociados a clientes y mesas.
+  \item \textbf{Entrada:} Selección de menús, cliente y mesa.
+  \item \textbf{Proceso:} Verificación de disponibilidad, cálculo de totales, actualización de inventario.
+  \item \textbf{Salida:} Confirmación del pedido y generación de boleta.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno, Mesero.
+\end{itemize}
+
+\subsubsection{RF-4: Gestión de Mesas}
+\begin{itemize}
+  \item \textbf{Descripción:} Visualizar y actualizar el estado de las mesas.
+  \item \textbf{Entrada:} Número de mesa, capacidad, estado.
+  \item \textbf{Proceso:} Actualización de estado, cálculo de tiempos de ocupación.
+  \item \textbf{Salida:} Confirmación de la acción o mensaje de error.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno, Mesero.
+\end{itemize}
+
+\subsubsection{RF-5: Reportes Analíticos}
+\begin{itemize}
+  \item \textbf{Descripción:} Generar reportes de ventas, uso de ingredientes y popularidad de menús.
+  \item \textbf{Entrada:} Parámetros de filtro (fecha, categoría, etc.).
+  \item \textbf{Proceso:} Análisis de datos históricos, generación de visualizaciones.
+  \item \textbf{Salida:} Reportes en formatos PDF y gráficos interactivos.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno.
+\end{itemize}
+
+\subsubsection{RF-6: Sistema de Delivery}
+\begin{itemize}
+  \item \textbf{Descripción:} Gestionar pedidos para entrega a domicilio.
+  \item \textbf{Entrada:} Datos de pedido, dirección de entrega, método de pago.
+  \item \textbf{Proceso:} Verificación de cobertura, asignación de repartidor, seguimiento.
+  \item \textbf{Salida:} Confirmación del pedido y estimación de tiempo de entrega.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno, Mesero.
+\end{itemize}
+
+\subsubsection{RF-7: Procesamiento de Pagos}
+\begin{itemize}
+  \item \textbf{Descripción:} Registrar pagos por diferentes métodos y generar comprobantes.
+  \item \textbf{Entrada:} Método de pago, monto, datos fiscales si corresponde.
+  \item \textbf{Proceso:} Validación de pago, registro en sistema, generación de comprobante.
+  \item \textbf{Salida:} Confirmación de pago y comprobante fiscal.
+  \item \textbf{Actores:} Jefe de Local, Jefe de Turno, Mesero.
+\end{itemize}
+
+\subsection{Requisitos No Funcionales (RNF)}
+
+\subsubsection{RNF-1: Rendimiento}
+El sistema debe ser capaz de procesar un considerable volumen de datos o de complejidades altas en un tiempo no mayor a 3 segundos. Las operaciones críticas como la toma de pedidos y actualización de inventario deben completarse en menos de 1 segundo.
+
+\subsubsection{RNF-2: Seguridad}
+\begin{itemize}
+  \item Autenticación mediante credenciales y tokens JWT.
+  \item Encriptación de datos sensibles en la base de datos.
+  \item Protección contra ataques comunes como SQL Injection y XSS.
+  \item Registro detallado de auditoría para operaciones críticas.
+  \item Control de acceso basado en roles claramente definidos.
+\end{itemize}
+
+\subsubsection{RNF-3: Escalabilidad}
+\begin{itemize}
+  \item El sistema debe soportar múltiples usuarios simultáneamente sin degradación del rendimiento.
+  \item Debe ser capaz de escalar horizontalmente mediante la adición de servidores.
+  \item La arquitectura debe permitir el crecimiento modular de funcionalidades.
+  \item Las operaciones de base de datos deben optimizarse con índices adecuados para volúmenes crecientes.
+\end{itemize}
+
+\subsubsection{RNF-4: Mantenibilidad}
+\begin{itemize}
+  \item La arquitectura debe permitir actualizaciones sin afectar la disponibilidad del servicio.
+  \item El código debe estar documentado y seguir estándares de calidad.
+  \item La implementación debe seguir principios SOLID y patrones de diseño reconocidos.
+  \item Se deben implementar pruebas automatizadas con cobertura significativa.
+\end{itemize}
+
+\subsubsection{RNF-5: Disponibilidad}
+El sistema debe garantizar una disponibilidad en equipos modernos y antiguos, siendo capaz de ejecutarse en entornos con menores recursos. Debe mantener funcionalidad básica incluso en condiciones de conectividad intermitente.
+
+\subsubsection{RNF-6: Compatibilidad}
+El sistema debe ser accesible desde navegadores modernos (Chrome, Firefox, Edge, Safari) y dispositivos móviles. La interfaz debe adaptarse a diferentes resoluciones de pantalla.
+
+\subsubsection{RNF-7: Usabilidad}
+\begin{itemize}
+  \item La interfaz debe ser intuitiva y accesible para usuarios con conocimientos básicos de tecnología.
+  \item El sistema debe proporcionar retroalimentación clara sobre las acciones realizadas.
+  \item Los flujos de trabajo comunes deben completarse en un máximo de 3 interacciones.
+  \item La curva de aprendizaje para nuevos usuarios debe ser mínima.
+\end{itemize}
+
+\subsection{Requisitos de Interfaces}
+
+\subsubsection{Interfaces de Usuario}
+\begin{itemize}
+  \item \textbf{GUI Web:} Interfaz responsiva desarrollada en React, optimizada para diferentes dispositivos.
+  \item \textbf{Dashboard:} Tablero interactivo con visualizaciones en tiempo real para análisis de datos.
+  \item \textbf{Vista de Mesas:} Representación gráfica del restaurante con estados actualizados.
+  \item \textbf{Panel de Cocina:} Interfaz simplificada que muestra pedidos pendientes ordenados por prioridad.
+\end{itemize}
+
+\subsubsection{Interfaces de Hardware}
+\begin{itemize}
+  \item \textbf{Computadoras:} Para administración y análisis de datos.
+  \item \textbf{Tablets:} Para meseros y gestión de pedidos en mesa.
+  \item \textbf{Pantallas táctiles:} Para cocina y visualización de pedidos pendientes.
+  \item \textbf{Impresoras térmicas:} Para generación de comprobantes y comandas.
+  \item \textbf{Dispositivos móviles:} Para seguimiento de entregas y notificaciones.
+\end{itemize}
+
+\subsubsection{Interfaces de Software}
+\begin{itemize}
+  \item \textbf{API REST:} Para comunicación entre frontend y backend.
+  \item \textbf{Webhooks:} Para integraciones con plataformas de delivery.
+  \item \textbf{SDKs:} Para procesadores de pago y servicios de mapas.
+  \item \textbf{WebSockets:} Para actualizaciones en tiempo real de pedidos y estados.
+\end{itemize}
+
+\subsubsection{Interfaces de Comunicación}
+\begin{itemize}
+  \item \textbf{HTTP/HTTPS:} Protocolo principal de comunicación con TLS para seguridad.
+  \item \textbf{WebSockets:} Para comunicaciones bidireccionales en tiempo real.
+  \item \textbf{SMTP:} Para envío de notificaciones por correo electrónico.
+  \item \textbf{SMS Gateway:} Para notificaciones a clientes sobre estado de pedidos.
+\end{itemize}
+
+\subsection{Precondiciones, Postcondiciones y Flujos Alternativos}
+
+\subsubsection{Precondiciones Generales}
+\begin{itemize}
+  \item Usuario autenticado con nivel de permisos adecuado.
+  \item Conexión al servidor disponible.
+  \item Datos maestros necesarios ya configurados en el sistema.
+\end{itemize}
+
+\subsubsection{Postcondiciones Generales}
+\begin{itemize}
+  \item La operación se registra en el log de auditoría.
+  \item Los datos modificados se actualizan en tiempo real para todos los usuarios.
+  \item Se generan notificaciones relevantes para los actores involucrados.
+\end{itemize}
+
+\subsubsection{Flujos Alternativos Comunes}
+\begin{itemize}
+  \item \textbf{Error de validación:} Se muestran mensajes específicos y se permite corregir.
+  \item \textbf{Problema de conexión:} Los datos se almacenan localmente y se sincronizan cuando se restablece.
+  \item \textbf{Conflicto de datos:} Se notifica a los usuarios afectados y se proponen opciones de resolución.
+  \item \textbf{Operación cancelada:} No se realizan cambios y se vuelve al estado anterior.
+\end{itemize}
+
+\section{Modelo de Datos}
+
+\subsection{Diagrama Entidad-Relación}
+El modelo de datos del sistema está diseñado para soportar todas las entidades principales y sus relaciones. Las principales entidades son:
+
+\begin{itemize}
+  \item \textbf{Cliente:} Almacena información de los clientes del restaurante.
+  \item \textbf{Ingrediente:} Registra los insumos utilizados en la preparación de menús.
+  \item \textbf{Menu:} Define los platos ofrecidos, con sus precios y categorías.
+  \item \textbf{MenuIngrediente:} Establece la relación entre menús e ingredientes, con cantidades.
+  \item \textbf{Pedido:} Registra los pedidos realizados por clientes.
+  \item \textbf{PedidoMenu:} Relaciona pedidos con los menús seleccionados y sus cantidades.
+  \item \textbf{Mesa:} Almacena información de las mesas del restaurante y su estado.
+  \item \textbf{Delivery:} Registra información específica de pedidos a domicilio.
+  \item \textbf{Pago:} Almacena transacciones financieras asociadas a pedidos.
+  \item \textbf{Usuario:} Gestiona credenciales y permisos de los usuarios del sistema.
+\end{itemize}
+
+Ver diagrama completo en el Apéndice.
+
+\subsection{Descripción de Tablas y Atributos}
+
+\subsubsection{Cliente}
+\begin{itemize}
+  \item id: Identificador único
+  \item rut: RUT o documento de identidad
+  \item nombre: Nombre completo
+  \item telefono: Número de contacto
+  \item email: Correo electrónico
+  \item direccion: Dirección física
+  \item fecha\_registro: Fecha de primer registro
+  \item ultima\_visita: Fecha de última interacción
+\end{itemize}
+
+\subsubsection{Ingrediente}
+\begin{itemize}
+  \item id: Identificador único
+  \item nombre: Nombre del ingrediente
+  \item categoria: Clasificación del ingrediente
+  \item stock: Cantidad disponible
+  \item unidad\_medida: Unidad de medida (kg, litros, etc.)
+  \item nivel\_critico: Cantidad mínima antes de alertar
+  \item precio\_unitario: Costo por unidad
+  \item proveedor: Proveedor habitual
+\end{itemize}
+
+\subsubsection{Menu}
+\begin{itemize}
+  \item id: Identificador único
+  \item nombre: Nombre del plato
+  \item descripcion: Descripción detallada
+  \item precio: Precio de venta
+  \item categoria: Clasificación del menú
+  \item disponible: Estado de disponibilidad
+  \item tiempo\_preparacion: Tiempo estimado en minutos
+  \item imagen: Ruta a la imagen del plato
+\end{itemize}
+
+\subsubsection{Pedido}
+\begin{itemize}
+  \item id: Identificador único
+  \item cliente\_id: Relación con cliente
+  \item mesa\_id: Relación con mesa (puede ser nulo para delivery)
+  \item estado: Estado del pedido (recibido, preparando, listo, entregado, etc.)
+  \item fecha\_hora: Timestamp de creación
+  \item total: Monto total del pedido
+  \item notas: Observaciones especiales
+  \item usuario\_id: Usuario que registró el pedido
+\end{itemize}
+
+\subsection{Relaciones entre Entidades}
+\begin{itemize}
+  \item Un \textbf{Cliente} puede tener múltiples \textbf{Pedidos}.
+  \item Un \textbf{Menu} puede contener múltiples \textbf{Ingredientes} (a través de \textbf{MenuIngrediente}).
+  \item Un \textbf{Ingrediente} puede ser parte de múltiples \textbf{Menus} (a través de \textbf{MenuIngrediente}).
+  \item Un \textbf{Pedido} puede incluir múltiples \textbf{Menus} (a través de \textbf{PedidoMenu}).
+  \item Un \textbf{Pedido} puede estar asociado a una \textbf{Mesa} (o ninguna en caso de delivery).
+  \item Un \textbf{Pedido} puede tener un registro \textbf{Delivery} asociado.
+  \item Un \textbf{Pedido} puede tener múltiples registros de \textbf{Pago} (pago dividido).
+  \item Un \textbf{Usuario} tiene un \textbf{Rol} que define sus permisos.
+\end{itemize}
+
+\subsection{Diagrama MERR}
+\begin{itemize}
+      \item id: Identificador único
+\end{itemize}
+
+\section{Arquitectura del Sistema}
+
+\subsection{Visión General de la Arquitectura}
+El sistema se construye siguiendo los principios de Clean Architecture, que establece una separación clara de responsabilidades en diferentes capas:
+
+\begin{itemize}
+  \item \textbf{Capa de Presentación:} Componentes React para la interfaz de usuario y controladores de API en Django.
+  \item \textbf{Capa de Aplicación:} Casos de uso e interactores que implementan la lógica de negocio específica.
+  \item \textbf{Capa de Dominio:} Entidades del negocio y reglas empresariales fundamentales.
+  \item \textbf{Capa de Infraestructura:} Implementaciones concretas de repositorios, acceso a bases de datos y servicios externos.
+\end{itemize}
+
+Esta arquitectura permite una alta cohesión y bajo acoplamiento, facilitando la mantenibilidad y evolución del sistema.
+
+\subsection{Componentes y Módulos}
+\begin{itemize}
+  \item \textbf{Frontend:}
+  \begin{itemize}
+    \item Módulo de Autenticación y Control de Acceso
+    \item Módulo de Gestión de Clientes
+    \item Módulo de Gestión de Inventario
+    \item Módulo de Gestión de Menús
+    \item Módulo de Gestión de Pedidos
+    \item Módulo de Gestión de Mesas
+    \item Módulo de Delivery
+    \item Módulo de Pagos
+    \item Dashboard Analítico
+  \end{itemize}
+  
+  \item \textbf{Backend:}
+  \begin{itemize}
+    \item API REST para todos los módulos
+    \item Servicios de Autenticación y Autorización
+    \item Servicios de Procesamiento de Pagos
+    \item Servicios de Notificaciones
+    \item Servicios de Generación de Reportes
+    \item Servicios de Integración con Plataformas Externas
+  \end{itemize}
+  
+  \item \textbf{Base de Datos:}
+  \begin{itemize}
+    \item PostgreSQL como motor principal
+    \item Redis para caché y datos temporales
+  \end{itemize}
+\end{itemize}
+
+\subsection{Integración con Sistemas Externos}
+\begin{itemize}
+  \item \textbf{Plataformas de Delivery:} Integración mediante APIs para recibir pedidos de plataformas externas.
+  \item \textbf{Pasarelas de Pago:} Integración con servicios de procesamiento de pagos electrónicos.
+  \item \textbf{Servicios de Mapas:} Para visualización y optimización de rutas de entrega.
+  \item \textbf{Servicios de Correo:} Para envío de comprobantes y notificaciones.
+  \item \textbf{Servicios SMS:} Para notificaciones a clientes sobre el estado de sus pedidos.
+\end{itemize}
+
+\subsection{Principios de Diseño y Patrones}
+El sistema implementa diversos patrones de diseño para resolver problemas específicos:
+
+\begin{itemize}
+  \item \textbf{Repository Pattern:} Abstrae el acceso a datos, permitiendo cambiar la implementación sin afectar a los consumidores.
+  \item \textbf{Factory Method:} Para crear diferentes tipos de objetos como pedidos locales vs. delivery.
+  \item \textbf{Observer:} Para mantener sincronizados diferentes componentes cuando cambia el estado de entidades clave.
+  \item \textbf{State:} Para gestionar los diferentes estados de pedidos y mesas.
+  \item \textbf{Facade:} Para proporcionar una interfaz unificada para subsistemas complejos como el dashboard analítico.
+  \item \textbf{Strategy:} Para implementar diferentes algoritmos de cálculo de precios o rutas de entrega.
+  \item \textbf{Dependency Injection:} Para desacoplar componentes y facilitar las pruebas unitarias.
+\end{itemize}
+
+\section{Límites del Sistema}
+
+\subsection{Alcance del Sistema}
+El sistema abarca los siguientes módulos y funcionalidades:
+
+\begin{itemize}
+  \item Gestión completa de clientes, ingredientes, menús y pedidos.
+  \item Administración de mesas y tiempos de servicio.
+  \item Sistema de delivery con seguimiento de pedidos.
+  \item Procesamiento de múltiples formas de pago.
+  \item Dashboard analítico para toma de decisiones.
+  \item Generación de comprobantes fiscales.
+\end{itemize}
+
+\textbf{No se incluye en esta fase:}
+\begin{itemize}
+  \item Gestión de proveedores y compras de inventario.
+  \item Sistema de reservas online para clientes.
+  \item Aplicación móvil dedicada para clientes finales.
+  \item Integración con sistemas contables externos.
+  \item Módulo de recursos humanos para gestión de personal.
+\end{itemize}
+
+\subsection{Integración con Servicios Externos}
+\begin{itemize}
+  \item El sistema se integrará con plataformas de delivery mediante APIs estándar.
+  \item Se permitirá la integración con servicios de pago electrónico comunes.
+  \item Se utilizarán servicios de mapas para visualización de rutas de entrega.
+  \item La capacidad de integración con otros servicios estará limitada a interfaces documentadas y estables.
+\end{itemize}
+
+\subsection{Acceso de Usuarios}
+\begin{itemize}
+  \item El sistema soportará hasta 50 usuarios concurrentes en esta fase.
+  \item El acceso se realizará mediante navegadores web modernos.
+  \item Cada usuario accederá según su rol definido (Jefe de Local, Jefe de Turno, Mesero, Cocina).
+  \item El acceso desde dispositivos móviles será mediante diseño responsivo, no aplicaciones nativas.
+\end{itemize}
+
+\subsection{Capacidad de Escalabilidad}
+\begin{itemize}
+  \item El sistema debe soportar un crecimiento anual del 30\% en volumen de datos.
+  \item La arquitectura debe permitir escalar horizontalmente para manejar mayor carga.
+  \item Las bases de datos deben optimizarse para manejar hasta 1000 transacciones por minuto.
+  \item El diseño modular debe facilitar la adición de nuevas funcionalidades sin afectar las existentes.
+\end{itemize}
+
+\subsection{Compatibilidad de Dispositivos}
+\begin{itemize}
+  \item \textbf{Computadoras:} Compatibilidad con Windows, MacOS y Linux.
+  \item \textbf{Navegadores:} Chrome, Firefox, Safari y Edge en sus versiones recientes.
+  \item \textbf{Dispositivos móviles:} Tablets y smartphones con iOS 12+ y Android 8+.
+  \item \textbf{Resoluciones:} Desde 1024x768 hasta 2560x1440 para PC, y estándares móviles.
+\end{itemize}
+
+\subsection{Soporte Multilenguaje}
+\begin{itemize}
+  \item La interfaz estará inicialmente en español.
+  \item La arquitectura contemplará internacionalización (i18n) para futura expansión.
+  \item Se utilizarán formatos estándar para fechas, moneda y notaciones numéricas.
+\end{itemize}
+
+\subsection{Respaldo y Recuperación}
+\begin{itemize}
+  \item Se realizarán backups automáticos diarios de la base de datos.
+  \item Se mantendrán copias incrementales cada 6 horas.
+  \item El tiempo máximo de recuperación (RTO) será de 1 hora.
+  \item El punto objetivo de recuperación (RPO) será de máximo 6 horas.
+\end{itemize}
+
+\section{Planificación del Proyecto}
+
+\subsection{Metodología}
+El proyecto seguirá la metodología Scrum con 5 integrantes dedicando 5 horas semanales cada uno. Se estructurarán los siguientes sprints:
+\begin{itemize}
+  \item \textbf{Sprint 0:} 2 semanas para análisis y planificación inicial.
+  \item \textbf{Sprint 1-3:} 4 semanas cada uno para desarrollo e implementación.
+\end{itemize}
+
+Cada sprint incluirá:
+\begin{itemize}
+  \item Sprint Planning al inicio
+  \item Daily Standups (3 veces por semana)
+  \item Sprint Review al final
+  \item Sprint Retrospective para mejora continua
+\end{itemize}
+
+\subsection{Cronograma}
+\begin{longtable}{|l|l|l|}
+\hline
+\textbf{Sprint} & \textbf{Objetivo Principal} & \textbf{Duración} \\
+\hline
+Sprint 0 & Análisis y diseño inicial & 4 semanas \\
+\hline
+Sprint 1 & Configuración de entornos y desarrollo inicial & 4 semanas \\
+\hline
+Sprint 2 & Desarrollo de funcionalidades principales & 4 semanas \\
+\hline
+Sprint 3 & Integración, pruebas y despliegue & 4 semanas \\
+\hline
+\end{longtable}
+
+\subsection{Tareas del Sprint 0}
+
+\subsubsection{1. Inventariar funcionalidades actuales}
+\begin{itemize}
+  \item Documentar operaciones CRUD y flujos relacionados con clientes, ingredientes, menús y pedidos.
+  \item Identificar los tipos de informes y visualizaciones generados por el sistema actual.
+\end{itemize}
+
+\subsubsection{2. Mapear flujos de trabajo}
+\begin{itemize}
+  \item Crear diagramas detallados del proceso actual de toma de pedidos.
+  \item Documentar el flujo actual de gestión de inventario.
+\end{itemize}
+
+\subsubsection{3. Identificar puntos débiles}
+\begin{itemize}
+  \item Analizar limitaciones de la interfaz de usuario actual.
+  \item Identificar problemas de escalabilidad y rendimiento.
+  \item Documentar las deficiencias en seguridad y gestión de usuarios.
+\end{itemize}
+
+\subsubsection{4. Definir arquitectura}
+\begin{itemize}
+  \item Establecer la estructura de capas siguiendo Clean Architecture.
+  \item Seleccionar patrones de diseño para resolver problemas específicos.
+  \item Definir interfaces y contratos entre componentes.
+\end{itemize}
+
+\subsubsection{5. Diseñar modelo de datos}
+\begin{itemize}
+  \item Crear el modelo entidad-relación completo.
+  \item Definir las migraciones necesarias para crear la estructura.
+  \item Planificar la estrategia de migración de datos del sistema actual.
+\end{itemize}
+
+\section{Resultados Esperados}
+
+\subsection{Entregables Concretos}
+\begin{itemize}
+  \item \textbf{Aplicación web completa:} Frontend en React y backend en Django.
+  \item \textbf{Base de datos:} Estructura completa y datos migrados del sistema actual.
+  \item \textbf{Documentación:} Manuales técnicos y de usuario.
+  \item \textbf{Material de capacitación:} Guías y videos tutoriales para usuarios.
+  \item \textbf{Código fuente:} Repositorio Git con el código completo del proyecto.
+  \item \textbf{Scripts:} Scripts de despliegue, migración y backup.
+  \item \textbf{Pruebas automatizadas:} Suite de tests unitarios y de integración.
+\end{itemize}
+
+\subsection{Beneficios Cuantificables}
+\begin{itemize}
+  \item \textbf{Reducción del 90\%} en errores de pedidos.
+  \item \textbf{Disminución del 40\%} en tiempo de servicio.
+  \item \textbf{Aumento del 25\%} en la rotación de mesas.
+  \item \textbf{Reducción del 30\%} en pérdidas de inventario.
+  \item \textbf{Mejora del 35\%} en las calificaciones de satisfacción del cliente.
+  \item \textbf{Incremento del 15\%} en margen de beneficio por mejor control de costos.
+  \item \textbf{Reducción del 30\%} en horas-hombre dedicadas a tareas administrativas.
+\end{itemize}
+
+\subsection{Mejoras Operativas Esperadas}
+\begin{itemize}
+  \item \textbf{Mayor agilidad en atención al cliente:} Pedidos tomados directamente en mesa con dispositivos móviles.
+  \item \textbf{Mejor comunicación entre áreas:} Notificaciones en tiempo real entre servicio y cocina.
+  \item \textbf{Control efectivo de inventario:} Actualización automática de stock al procesar pedidos.
+  \item \textbf{Optimización del espacio:} Mejor gestión de mesas y tiempos de ocupación.
+  \item \textbf{Diversificación de canales de venta:} Integración con plataformas de delivery.
+  \item \textbf{Toma de decisiones basada en datos:} Dashboard analítico con KPIs actualizados.
+  \item \textbf{Mejora en la experiencia del cliente:} Reducción de tiempos de espera y errores.
+\end{itemize}
+
+\section{Apéndices}
+
+\subsection{Glosario}
+\begin{description}
+  \item[Cliente:] Persona que realiza pedidos en el restaurante.
+  \item[Pedido:] Conjunto de ítems solicitados por un cliente.
+  \item[Menú:] Oferta del restaurante compuesta por uno o más ingredientes.
+  \item[Ingrediente:] Unidad básica del inventario que compone los menús.
+  \item[Mesa:] Espacio físico donde se atiende a los clientes en el restaurante.
+  \item[Delivery:] Servicio de entrega de pedidos a domicilio.
+  \item[Stock:] Cantidad disponible de un ingrediente en el inventario.
+  \item[Nivel crítico:] Cantidad mínima de un ingrediente antes de generar alertas.
+  \item[Dashboard:] Tablero visual con indicadores clave del negocio.
+  \item[KPI:] Indicador clave de desempeño, métrica importante para el negocio.
+  \item[Clean Architecture:] Patrón de arquitectura que separa responsabilidades en capas.
+  \item[ORM:] Mapeo objeto-relacional, técnica para interactuar con la base de datos.
+  \item[JWT:] JSON Web Token, mecanismo de autenticación segura.
+  \item[API REST:] Interfaz de programación que sigue los principios RESTful.
+  \item[Frontend:] Parte del sistema con la que interactúan directamente los usuarios.
+  \item[Backend:] Parte del sistema que procesa las operaciones y gestiona los datos.
+\end{description}
+
+\subsection{Diagramas y Modelos}
+\begin{itemize}
+  \item Diagrama de Arquitectura (Ver documento anexo)
+  \item Diagramas de Casos de Uso:
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/sistema_pagos.png}
+      \caption{Diagrama de Casos de Uso: Sistema de Pagos}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/sistema_delivery.png}
+      \caption{Diagrama de Casos de Uso: Sistema de Delivery}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/reportes_basicos.png}
+      \caption{Diagrama de Casos de Uso: Reportes Básicos}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_pedidos.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Pedidos}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_mesas.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Mesas}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_menus_cocina.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Menús (Cocina)}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_menus.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Menús (Jefe de Local)}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_ingredientes_cocina.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Ingredientes (Cocina)}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_ingredientes.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Ingredientes (Jefe de Local)}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_clientes_mesero.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Clientes (Mesero)}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/gestion_clientes.png}
+      \caption{Diagrama de Casos de Uso: Gestión de Clientes (Jefe de Local)}
+    \end{figure}
+    
+    \begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\textwidth]{casos_de_uso/dashboard_analitico.png}
+      \caption{Diagrama de Casos de Uso: Dashboard Analítico}
+    \end{figure}
+  \item Diagrama Entidad-Relación (Ver documento anexo)
+  \item Diagrama de Componentes (Ver documento anexo)
+  \item Diagrama de Despliegue (Ver documento anexo)
+\end{itemize}
+
+\subsection{Casos de Uso}
+Se documentan en detalle 33 casos de uso para el sistema refactorizado, organizados en módulos:
+\begin{itemize}
+  \item Gestión de Clientes: 5 casos de uso
+  \item Gestión de Ingredientes: 5 casos de uso
+  \item Gestión de Menús: 5 casos de uso
+  \item Gestión de Pedidos: 5 casos de uso
+  \item Gestión de Mesas: 3 casos de uso
+  \item Sistema de Delivery: 3 casos de uso
+  \item Sistema de Pagos: 3 casos de uso
+  \item Dashboard Analítico: 3 casos de uso
+\end{itemize}
+
+Para cada caso de uso se detalla: actores, precondiciones, flujo principal, flujos alternativos, postcondiciones y excepciones.
+
+Ver documento \texttt{Casos\_De\_Uso\_Extendidos.md} para la especificación completa.
+
+\subsection{Anexos}
+\begin{itemize}
+  \item Mockups de interfaces principales
+  \item Ejemplos de reportes analíticos
+  \item Especificaciones técnicas detalladas
+  \item Plan de pruebas y validación
+  \item Plan de capacitación para usuarios
+\end{itemize}
+
+\subsection{Referencias Bibliográficas}
+\begin{itemize}
+  \item Martin, R. C. (2008). \emph{Clean Code: A Handbook of Agile Software Craftsmanship}. Prentice Hall. - Principios fundamentales aplicados en la arquitectura del sistema, incluyendo:
+    \begin{itemize}
+      \item Principio de Responsabilidad Única (SRP)
+      \item Reglas para funciones limpias y cohesivas
+      \item Convenciones de nomenclatura significativa
+      \item Técnicas para manejo de errores elegante
+      \item Prácticas de comentarios efectivos
+      \item Organización de clases y componentes
+      \item Patrones de diseño emergente
+    \end{itemize}
+  \item Martin, R. C. (2017). \emph{Clean Architecture: A Craftsman's Guide to Software Structure and Design}. Prentice Hall. - Conceptos aplicados en la definición de capas y dependencias del sistema.
+  \item Martin, R. C. (2002). \emph{Agile Software Development, Principles, Patterns, and Practices}. Prentice Hall. - Principios SOLID implementados en el diseño modular del sistema.
+\end{itemize}
+
+\end{document}
