@@ -149,6 +149,8 @@ export class UI {
         tbodyPreparacion.appendChild(fila);
       });
     }
+
+    this.actualizarPedidosRecientes();
   }
 
   actualizarResumenDashboard() {
@@ -161,5 +163,20 @@ export class UI {
     this.elementos.resumenPendientes.textContent = pendientes;
     this.elementos.resumenPreparacion.textContent = preparacion;
     this.elementos.resumenListos.textContent = listos;
+
+    this.actualizarPedidosRecientes();
+  }
+
+  actualizarPedidosRecientes() {
+    const lista = document.getElementById('listaPedidosRecientes');
+    if (!lista) return;
+    // Toma los últimos 5 pedidos (del más reciente al más antiguo)
+    const recientes = this.gestorPedidos.pedidos.slice(-5).reverse();
+    lista.innerHTML = '';
+    recientes.forEach(pedido => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${pedido.nombre}</span> <span style="color:#ff7a00;font-weight:600;">${pedido.estado}</span>`;
+      lista.appendChild(li);
+    });
   }
 }
