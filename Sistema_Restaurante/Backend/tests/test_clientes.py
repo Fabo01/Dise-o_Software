@@ -14,19 +14,20 @@ def no_existe_cliente(nombre, limpiar_clientes):
 
 @given(parsers.parse('que existe un cliente con nombre "{nombre}"'))
 def existe_cliente(nombre, db):
-    rut = f"{nombre.lower()}-rut"
+    rut = "21533873-8" if nombre == "Ana" else ("21533874-6" if nombre == "Luis" else "21533879-7")
     ClienteModelo.objects.create(nombre=nombre, rut=rut, correo=f"{nombre}@mail.com")
     assert ClienteModelo.objects.filter(nombre=nombre).exists()
 
 @given('que existen clientes registrados')
 def existen_clientes_registrados(db):
-    ClienteModelo.objects.create(nombre="Ana", rut="ana-rut", correo="ana@mail.com")
-    ClienteModelo.objects.create(nombre="Luis", rut="luis-rut", correo="luis@mail.com")
+    ClienteModelo.objects.create(nombre="Ana", rut="21533873-8", correo="ana@mail.com")
+    ClienteModelo.objects.create(nombre="Luis", rut="21533874-6", correo="luis@mail.com")
     assert ClienteModelo.objects.count() >= 2
 
 @when(parsers.parse('creo un cliente con nombre "{nombre}", correo "{correo}"'))
 def crear_cliente(nombre, correo, db):
-    ClienteModelo.objects.create(nombre=nombre, correo=correo)
+    rut = "21533879-7" if nombre == "Pedro" else "21533881-9"
+    ClienteModelo.objects.create(nombre=nombre, rut=rut, correo=correo)
 
 @when(parsers.parse('actualizo el cliente "{nombre}" a correo "{correo}"'))
 def actualizar_cliente(nombre, correo, db):
