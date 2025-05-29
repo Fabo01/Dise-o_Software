@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestor Restaurante</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <img src="img/logo.png" alt="Logo Restaurante" class="logo">
+
+    <nav>
+      <ul>
+        <li><button class="nav-link" data-section="dashboard">Dashboard</button></li>
+
+        <li class="seccion-titulo">--Pedidos--</li>
+        <li><button class="nav-link" data-section="pedidos">Pedidos</button></li>
+        <li><button class="nav-link" data-section="preparacion">Preparación Pedidos</button></li>
+        <li><button class="nav-link" data-section="listos">Lista de Pedidos</button></li>
+        <li><button class="nav-link" data-section="cuentas">Cuentas</button></li>
+
+        <li class="seccion-titulo">--Administración--</li>
+        <li><button class="nav-link" data-section="menuRestaurante">Menú Restaurante</button></li>
+        <li><button class="nav-link" data-section="mesas">Gestión de Mesas</button></li>
+        <li><button class="nav-link" data-section="clientes">Gestión de Clientes</button></li>
+
+        <li class="seccion-titulo">--Administración Avanzada--</li>
+        <li><button class="nav-link" data-section="usuarios">Gestión de Usuarios</button></li>
+      </ul>
+    </nav>
+
+    <footer class="creditos">
+      <span class="copyright">&copy;</span>
+      Desarrollado por esclaviza rappi
+    </footer>
+  </aside>
+
+<main class="contenido">
+    <section id="dashboard" class="seccion">
+        <h1>Bienvenido al Panel de Gestión</h1>
+        <p>Resumen general del restaurante:</p>
+
+        <div class="dashboard-resumen">
+            <div class="card">
+                <h3>Pedidos Pendientes</h3>
+                <p id="resumenPendientes">0</p>
+            </div>
+            <div class="card">
+                <h3>En Preparación</h3>
+                <p id="resumenPreparacion">0</p>
+            </div>
+            <div class="card">
+                <h3>Listos para Entregar</h3>
+                <p id="resumenListos">0</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pedidos" class="seccion oculto">
+      <h2>Gestión de Pedidos</h2>
+      <form id="formPedido">
+        <input type="text" id="inputPedido" placeholder="Nombre del pedido" required />
+        <button type="submit">Agregar Pedido</button>
+      </form>
+
+      <label for="filtroEstado">Filtrar por estado:</label>
+      <select id="filtroEstado">
+        <option value="Todos">Todos</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="En Preparación">En Preparación</option>
+        <option value="Listo">Listo</option>
+      </select>
+
+      <table id="tablaPedidos">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="estadisticas">
+        <p>Total pedidos: <span id="totalPedidos">0</span></p>
+        <p>Pendientes: <span id="countPendientes">0</span></p>
+        <p>En preparación: <span id="countPreparacion">0</span></p>
+        <p>Listos: <span id="countListos">0</span></p>
+      </div>
+    </section>
+
+    <section id="preparacion" class="seccion oculto">
+      <h2>Pedidos en Preparación</h2>
+      <table id="tablaPreparacion">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="listos" class="seccion oculto">
+      <h2>Pedidos Listos</h2>
+      <table id="tablaListos">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="cuentas" class="seccion oculto">
+      <h2>Cuentas</h2>
+      <p>Módulo futuro para cobros y facturación.</p>
+    </section>
+
+    <section id="menuRestaurante" class="seccion oculto">
+      <h2>Menú Restaurante</h2>
+      <p>Gestiona los platos del menú.</p>
+    </section>
+
+    <section id="mesas" class="seccion oculto">
+      <h2>Gestión de Mesas</h2>
+      <p>Configura y organiza las mesas del local.</p>
+    </section>
+
+    <section id="clientes" class="seccion oculto">
+      <h2>Gestión de Clientes</h2>
+      <p>Registra, edita o elimina clientes.</p>
+    </section>
+
+    <section id="usuarios" class="seccion oculto">
+      <h2>Gestión de Usuarios</h2>
+      <p>Administración avanzada para roles y permisos.</p>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
