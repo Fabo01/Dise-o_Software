@@ -39,4 +39,3 @@ logs/
 # Archivos de configuración local
 .env
 .env.local
-Sistema_Restaurante/Backend/__pycache__/__init__.cpython-312.pyc

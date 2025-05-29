@@ -1,8 +1,8 @@
 from datetime import datetime
 from .EntidadBase import EntidadBase
-from ..objetos_valor.Correo_VO import CorreoVO
-from ..objetos_valor.RutVO import RutVO
-from ..objetos_valor.TelefonoVO import TelefonoVO
+from ..Objetos_Valor.Correo_VO import CorreoVO
+from ..Objetos_Valor.RutVO import RutVO
+from ..Objetos_Valor.TelefonoVO import TelefonoVO
 from ..Excepciones.DominioExcepcion import ValidacionExcepcion
 
 class ClienteEntidad(EntidadBase):
@@ -38,9 +38,9 @@ class ClienteEntidad(EntidadBase):
         # Usar objetos de valor para validación y encapsulación
         try:
             self._correo = CorreoVO(correo)
-            self._rut = RutVO(rut)
+            self._rut = RutVO(rut)  # RUT como objeto de valor, inmutable
             self._telefono = TelefonoVO(telefono)
-        except ValueError as e:
+        except Exception as e:
             raise ValidacionExcepcion(str(e))
 
     # Getters

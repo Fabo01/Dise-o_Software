@@ -17,6 +17,17 @@ def existe_ingrediente(nombre, cantidad, db):
     IngredienteModelo.objects.create(nombre=nombre, cantidad=cantidad, unidad_medida="kg", categoria="Verdura", nivel_critico=2)
     assert IngredienteModelo.objects.filter(nombre=nombre).exists()
 
+@given(parsers.parse('que existe un ingrediente llamado "{nombre}"'))
+def existe_ingrediente_simple(nombre, db):
+    IngredienteModelo.objects.create(nombre=nombre, cantidad=1, unidad_medida="kg", categoria="Verdura", nivel_critico=2)
+    assert IngredienteModelo.objects.filter(nombre=nombre).exists()
+
+@given('que existen ingredientes registrados')
+def existen_ingredientes_registrados(db):
+    IngredienteModelo.objects.create(nombre="Tomate", cantidad=1, unidad_medida="kg", categoria="Verdura", nivel_critico=2)
+    IngredienteModelo.objects.create(nombre="Lechuga", cantidad=1, unidad_medida="kg", categoria="Verdura", nivel_critico=2)
+    assert IngredienteModelo.objects.count() >= 2
+
 @when(parsers.parse('creo un ingrediente con nombre "{nombre}", cantidad {cantidad:d}, unidad "{unidad}", categoría "{categoria}", nivel crítico {nivel_critico:d}'))
 def crear_ingrediente(nombre, cantidad, unidad, categoria, nivel_critico, db):
     IngredienteModelo.objects.create(nombre=nombre, cantidad=cantidad, unidad_medida=unidad, categoria=categoria, nivel_critico=nivel_critico)

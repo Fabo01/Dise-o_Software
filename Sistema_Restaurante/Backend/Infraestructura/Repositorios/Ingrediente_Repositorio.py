@@ -1,11 +1,11 @@
 from django.db.models import F, Q
 
-from Backend.Aplicacion.Interfaces.IIngrediente_Repositorio import IIngrediente_Repositorio
+from Backend.Aplicacion.Interfaces.IIngrediente_Repositorio import IIngredienteRepositorio
 from Backend.Dominio.Entidades.Ingrediente_Entidad import IngredienteEntidad
 from Backend.Infraestructura.Modelos.Ingrediente_Modelo import IngredienteModelo
 
 
-class IngredienteRepositorio(IIngrediente_Repositorio):
+class IngredienteRepositorio(IIngredienteRepositorio):
     '''
         nombre (str): Nombre del ingrediente.
         cantidad (float): Cantidad disponible del ingrediente.

@@ -1,4 +1,4 @@
-from Backend.Dominio.objetos_valor.Correo_VO import CorreoVO
+from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
 from Backend.Infraestructura.Repositorios.Usuario_Repositorio import UsuarioRepositorio
 from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
 from Backend.Dominio.Factories.Usuario_Factory import UsuarioFactory  # Importa la factory
@@ -18,8 +18,8 @@ class UsuarioServicio:
         self.usuario_repositorio.guardar(usuario)
         self.observer_service.notificar("Usuario registrado", usuario)
 
-    def obtener_usuario(self, id):
-        usuario = self.usuario_repositorio.buscar_por_id(id)
+    def obtener_usuario(self, rut):
+        usuario = self.usuario_repositorio.buscar_por_rut(rut)
         if usuario is None:
             raise ValueError("Usuario no encontrado")
         return usuario
@@ -30,14 +30,14 @@ class UsuarioServicio:
     def listar_usuarios(self):
         return self.usuario_repositorio.listar_todos()
     
-    def eliminar_usuario(self, id):
-        if self.usuario_repositorio.eliminar(id):
-            self.observer_service.notificar("Usuario eliminado", id)
+    def eliminar_usuario(self, rut):
+        if self.usuario_repositorio.eliminar(rut):
+            self.observer_service.notificar("Usuario eliminado", rut)
             return True
         return False
     
-    def actualizar_usuario(self, id, datos_usuario):
-        usuario = self.usuario_repositorio.buscar_por_id(id)
+    def actualizar_usuario(self, rut, datos_usuario):
+        usuario = self.usuario_repositorio.buscar_por_rut(rut)
         if usuario is None:
             raise ValueError("Usuario no encontrado")
         

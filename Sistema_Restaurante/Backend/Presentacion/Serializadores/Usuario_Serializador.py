@@ -9,7 +9,7 @@ class UsuarioSerializador(serializers.ModelSerializer):
     class Meta:
         model = UsuarioModelo
         fields = '__all__'
-        read_only_fields = ["username", "fecha_registro", "ultima_sesion"]
+        read_only_fields = ["rut", "username", "fecha_registro", "ultima_sesion"]
 
     def to_representation(self, instance):
         # Obtén el diccionario base

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'Backend.Infraestructura',  # Ensure this app is listed
     'Backend.Presentacion',     # Correct app path
+    'drf_yasg',  # Para documentación Swagger/OpenAPI
 ]
 
 # Middleware
@@ -65,17 +66,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Backend.Config.wsgi.application'
 
 # Configuración de base de datos
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'restaurant_db',
-        'USER': 'admin',
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),  # Lee la contraseña desde la variable de entorno
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
 
+DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': 'restaurant_db',
+           'USER': 'restaurant_user',
+           'PASSWORD': 'Note12pro.',
+           'HOST': 'localhost',
+           'PORT': '5432',
+       }
+   }
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -132,4 +133,17 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
     ],
+}
+
+# Configuración de Swagger/Redoc
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    },
+    'DOC_EXPANSION': 'none',
 }

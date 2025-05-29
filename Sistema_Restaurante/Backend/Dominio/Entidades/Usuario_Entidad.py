@@ -2,14 +2,16 @@ from datetime import datetime
 import bcrypt
 
 from Backend.Dominio.Entidades.EntidadBase import EntidadBase
-from Backend.Dominio.objetos_valor.Correo_VO import CorreoVO
-from Backend.Dominio.objetos_valor.TelefonoVO import TelefonoVO
+from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
+from Backend.Dominio.Objetos_Valor.TelefonoVO import TelefonoVO
+from Backend.Dominio.Objetos_Valor.RutVO import RutVO
 from ..Excepciones.DominioExcepcion import ValidacionExcepcion
 
 
 class UsuarioEntidad(EntidadBase):
-    def __init__(self, username, password, email, nombre, apellido, rol, telefono, fecha_registro, ultima_sesion, direccion=None):
+    def __init__(self, rut, username, password, email, nombre, apellido, rol, telefono, fecha_registro, ultima_sesion, direccion=None):
         super().__init__()
+        self._rut = RutVO(rut)  # RUT como objeto de valor, inmutable
         self._username = username
         self._password = None  # Se setea con el setter
         self.password = password  # Usar el setter para decidir si encriptar o no
@@ -121,12 +123,8 @@ class UsuarioEntidad(EntidadBase):
         self._direccion = valor
 
     @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, valor):
-        self._id = valor
+    def rut(self):
+        return self._rut  # RUT es ahora un objeto de valor inmutable
 
     def actualizar_datos(self, nombre=None, apellido=None, email=None, telefono=None, rol=None, direccion=None):
         """

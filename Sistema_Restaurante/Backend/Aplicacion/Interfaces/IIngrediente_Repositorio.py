@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class IIngrediente_Repositorio(ABC):
+class IIngredienteRepositorio(ABC):
     @abstractmethod
     def guardar(self, ingrediente):
         pass

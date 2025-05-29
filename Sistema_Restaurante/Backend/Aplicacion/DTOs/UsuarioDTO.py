@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class UsuarioDTO(BaseModel):
-    id: int
+    rut: str  # RUT chileno, identificador único e inmutable
     username: Optional[str] = None  # Ahora es opcional, se autogenera
     password: str
     email: str

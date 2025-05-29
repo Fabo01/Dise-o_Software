@@ -25,13 +25,13 @@ class UsuarioAPI(APIView):
             UsuarioAPI.observer_service.registrar_observador(ConsoleNotificationObserver())
             UsuarioAPI.observer_registrado = True
 
-    def get(self, request, id=None):
+    def get(self, request, rut=None):
         """
         Obtener uno o todos los usuarios.
-        Si se proporciona id, retorna un usuario específico.
+        Si se proporciona rut, retorna un usuario específico.
         """
-        if id:
-            usuario = self.servicio_usuario.obtener_usuario(id)
+        if rut:
+            usuario = self.servicio_usuario.obtener_usuario(rut)
             if usuario:
                 serializador = UsuarioSerializador(usuario)
                 return Response(serializador.data, status=status.HTTP_200_OK)
@@ -59,29 +59,29 @@ class UsuarioAPI(APIView):
             return Response(UsuarioSerializador(usuario).data, status=status.HTTP_201_CREATED)
         return Response(serializador.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, id=None):
+    def put(self, request, rut):
         """
         Actualizar un usuario existente.
         """
-        if not id:
-            return Response({"error": "Se requiere el ID del usuario para actualizar."}, status=status.HTTP_400_BAD_REQUEST)
-        usuario = self.servicio_usuario.obtener_usuario(id)
+        if not rut:
+            return Response({"error": "Se requiere el RUT del usuario para actualizar."}, status=status.HTTP_400_BAD_REQUEST)
+        usuario = self.servicio_usuario.obtener_usuario(rut)
         if not usuario:
             return Response({"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         serializador = UsuarioSerializador(usuario, data=request.data, partial=True)
         if serializador.is_valid():
-            usuario_actualizado = self.servicio_usuario.actualizar_usuario(id, serializador.validated_data)
+            usuario_actualizado = self.servicio_usuario.actualizar_usuario(rut, serializador.validated_data)
             UsuarioAPI.observer_service.notificar("Usuario actualizado exitosamente.")
             return Response(UsuarioSerializador(usuario_actualizado).data, status=status.HTTP_200_OK)
         return Response(serializador.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, id=None):
+    def delete(self, request, rut):
         """
         Eliminar un usuario existente.
         """
-        if not id:
-            return Response({"error": "Se requiere el ID del usuario para eliminar."}, status=status.HTTP_400_BAD_REQUEST)
-        eliminado = self.servicio_usuario.eliminar_usuario(id)
+        if not rut:
+            return Response({"error": "Se requiere el RUT del usuario para eliminar."}, status=status.HTTP_400_BAD_REQUEST)
+        eliminado = self.servicio_usuario.eliminar_usuario(rut)
         if eliminado:
             UsuarioAPI.observer_service.notificar("Usuario eliminado exitosamente.")
             return Response({"mensaje": "Usuario eliminado"}, status=status.HTTP_204_NO_CONTENT)

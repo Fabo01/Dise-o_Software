@@ -10,11 +10,11 @@ class UsuarioRepositorio(IUsuarioRepositorio):
     def guardar(self, usuario):
         if usuario is None:
             raise ValueError("No se puede guardar un usuario nulo")
-        if usuario.id:
+        if hasattr(usuario, 'rut') and usuario.rut:
             try:
-                usuario_modelo = UsuarioModelo.objects.get(id=usuario.id)
+                usuario_modelo = UsuarioModelo.objects.get(rut=str(usuario.rut))
             except UsuarioModelo.DoesNotExist:
-                raise ValueError("Usuario no encontrado para actualizar")
+                usuario_modelo = UsuarioModelo(rut=str(usuario.rut))
             usuario_modelo.username = usuario.username
             usuario_modelo.password = usuario.password
             usuario_modelo.email = usuario.email.valor if hasattr(usuario.email, 'valor') else usuario.email
@@ -27,24 +27,12 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             usuario_modelo.direccion = usuario.direccion
             usuario_modelo.save()
         else:
-            usuario_modelo = UsuarioModelo.objects.create(
-                username=usuario.username,
-                password=usuario.password,
-                email=usuario.email.valor if hasattr(usuario.email, 'valor') else usuario.email,
-                nombre=usuario.nombre,
-                apellido=usuario.apellido,
-                rol=usuario.rol,
-                telefono=usuario.telefono.valor if hasattr(usuario.telefono, 'valor') else usuario.telefono,
-                fecha_registro=usuario.fecha_registro,
-                ultima_sesion=usuario.ultima_sesion,
-                direccion=usuario.direccion
-            )
-            usuario.id = usuario_modelo.id
+            raise ValueError("El usuario debe tener un RUT válido")
         return self._convertir_a_entidad(usuario_modelo)
     
-    def buscar_por_id(self, id):
+    def buscar_por_rut(self, rut):
         try:
-            usuario_modelo = UsuarioModelo.objects.get(id=id)
+            usuario_modelo = UsuarioModelo.objects.get(rut=rut)
             return self._convertir_a_entidad(usuario_modelo)
         except UsuarioModelo.DoesNotExist:
             return None
@@ -60,9 +48,9 @@ class UsuarioRepositorio(IUsuarioRepositorio):
         usuarios_modelo = UsuarioModelo.objects.all()
         return [self._convertir_a_entidad(usuario) for usuario in usuarios_modelo]
     
-    def eliminar(self, id):
+    def eliminar(self, rut):
         try:
-            usuario_modelo = UsuarioModelo.objects.get(id=id)
+            usuario_modelo = UsuarioModelo.objects.get(rut=rut)
             usuario_modelo.delete()
             return True
         except UsuarioModelo.DoesNotExist:
@@ -70,6 +58,7 @@ class UsuarioRepositorio(IUsuarioRepositorio):
         
     def _convertir_a_entidad(self, usuario_modelo):
         entidad = UsuarioEntidad(
+            rut=usuario_modelo.rut,
             username=usuario_modelo.username,
             password=usuario_modelo.password,
             email=usuario_modelo.email,
@@ -81,5 +70,4 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             ultima_sesion=usuario_modelo.ultima_sesion,
             direccion=usuario_modelo.direccion
         )
-        entidad.id = usuario_modelo.id
         return entidad
