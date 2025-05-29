@@ -103,6 +103,9 @@ Este tutorial te guiará paso a paso para instalar, activar y configurar Postgre
            'PASSWORD': 'tu_contraseña_segura',
            'HOST': 'localhost',
            'PORT': '5432',
+           'OPTIONS': {
+               'client_encoding': 'UTF8',
+           },
        }
    }
    ```

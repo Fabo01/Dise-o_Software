@@ -68,15 +68,18 @@ WSGI_APPLICATION = 'Backend.Config.wsgi.application'
 # Configuración de base de datos
 
 DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql_psycopg2',
-           'NAME': 'restaurant_db',
-           'USER': 'restaurant_user',
-           'PASSWORD': 'Note12pro.',
-           'HOST': 'localhost',
-           'PORT': '5432',
-       }
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'restaurant_db',
+        'USER': 'restaurant_user',
+        'PASSWORD': 'Note12pro.',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
+    }
+}
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
     {
