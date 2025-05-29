@@ -15,8 +15,9 @@ class UsuarioServicio:
 
     def registrar_usuario(self, datos_usuario):
         usuario = self.usuario_factory.crear(**datos_usuario)
-        self.usuario_repositorio.guardar(usuario)
-        self.observer_service.notificar("Usuario registrado", usuario)
+        usuario_guardado = self.usuario_repositorio.guardar(usuario)
+        self.observer_service.notificar("Usuario registrado", usuario_guardado)
+        return usuario_guardado
 
     def obtener_usuario(self, id):
         usuario = self.usuario_repositorio.buscar_por_id(id)
@@ -66,6 +67,27 @@ class UsuarioServicio:
         if usuario.password != password:
             raise ValueError("Contraseña incorrecta")
         self.observer_service.notificar("Usuario autenticado", usuario)
+        return usuario
+    
+    def cambiar_contrasena(self, id, nueva_contrasena):
+        """
+        Cambia la contraseña de un usuario.
+        Args:
+            id (int): ID del usuario
+            nueva_contrasena (str): Nueva contraseña en texto plano
+        Returns:
+            UsuarioEntidad: El usuario con la contraseña actualizada
+        Raises:
+            ValueError: Si el usuario no existe o la contraseña es inválida
+        """
+        usuario = self.usuario_repositorio.buscar_por_id(id)
+        if usuario is None:
+            raise ValueError("Usuario no encontrado")
+        if not nueva_contrasena or len(nueva_contrasena) < 6:
+            raise ValueError("La contraseña debe tener al menos 6 caracteres")
+        usuario.password = nueva_contrasena  # Setter encripta
+        self.usuario_repositorio.guardar(usuario)
+        self.observer_service.notificar("Contraseña actualizada", usuario)
         return usuario
 
 

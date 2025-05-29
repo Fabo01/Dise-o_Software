@@ -1,5 +1,4 @@
 from django.db.models import Q
-from datetime import datetime
 
 from Backend.Dominio.Entidades.Usuario_Entidad import UsuarioEntidad
 from Backend.Infraestructura.Modelos.Usuario_Modelo import UsuarioModelo
@@ -21,7 +20,8 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             usuario_modelo.nombre = usuario.nombre
             usuario_modelo.apellido = usuario.apellido
             usuario_modelo.rol = usuario.rol
-            usuario_modelo.telefono = usuario.telefono.valor if hasattr(usuario.telefono, 'valor') else usuario.telefono
+            # Siempre guardar el teléfono con el formato de TelefonoVO
+            usuario_modelo.telefono = usuario.telefono.valor if hasattr(usuario.telefono, 'valor') else str(usuario.telefono)
             usuario_modelo.fecha_registro = usuario.fecha_registro
             usuario_modelo.ultima_sesion = usuario.ultima_sesion
             usuario_modelo.direccion = usuario.direccion
@@ -30,11 +30,12 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             usuario_modelo = UsuarioModelo.objects.create(
                 username=usuario.username,
                 password=usuario.password,
-                email=usuario.email.valor if hasattr(usuario.email, 'valor') else usuario.email,
+                email=usuario.email.valor,
                 nombre=usuario.nombre,
                 apellido=usuario.apellido,
                 rol=usuario.rol,
-                telefono=usuario.telefono.valor if hasattr(usuario.telefono, 'valor') else usuario.telefono,
+                # Siempre guardar el teléfono con el formato de TelefonoVO
+                telefono=usuario.telefono.valor,
                 fecha_registro=usuario.fecha_registro,
                 ultima_sesion=usuario.ultima_sesion,
                 direccion=usuario.direccion
@@ -72,11 +73,11 @@ class UsuarioRepositorio(IUsuarioRepositorio):
         entidad = UsuarioEntidad(
             username=usuario_modelo.username,
             password=usuario_modelo.password,
-            email=usuario_modelo.email,
+            email=usuario_modelo.email.value,
             nombre=usuario_modelo.nombre,
             apellido=usuario_modelo.apellido,
             rol=usuario_modelo.rol,
-            telefono=usuario_modelo.telefono,
+            telefono=usuario_modelo.telefono.value,
             fecha_registro=usuario_modelo.fecha_registro,
             ultima_sesion=usuario_modelo.ultima_sesion,
             direccion=usuario_modelo.direccion

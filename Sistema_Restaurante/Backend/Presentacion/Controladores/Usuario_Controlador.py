@@ -87,3 +87,20 @@ class UsuarioAPI(APIView):
             return Response({"mensaje": "Usuario eliminado"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
+    def patch(self, request, id=None):
+        """
+        Permite cambiar la contraseña de un usuario.
+        Espera {"nueva_contrasena": "...}
+        """
+        if not id:
+            return Response({"error": "Se requiere el ID del usuario para cambiar la contraseña."}, status=status.HTTP_400_BAD_REQUEST)
+        nueva_contrasena = request.data.get("nueva_contrasena")
+        if not nueva_contrasena:
+            return Response({"error": "Debe proporcionar la nueva contraseña."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            usuario_actualizado = self.servicio_usuario.cambiar_contrasena(id, nueva_contrasena)
+            UsuarioAPI.observer_service.notificar("Contraseña cambiada exitosamente.")
+            return Response({"mensaje": "Contraseña actualizada correctamente."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+

@@ -16,6 +16,10 @@ class UsuarioSerializador(serializers.ModelSerializer):
         data = super().to_representation(instance)
         # Asegura que 'email' sea una cadena
         data['email'] = str(data.get('email', ''))
-        # Asegura que 'telefono' tenga un valor por defecto
-        data['telefono'] = data.get('telefono', '') or ''
+        # Asegura que 'telefono' sea string, incluso si es un TelefonoVO
+        telefono = data.get('telefono', '')
+        if hasattr(instance, 'telefono') and hasattr(instance.telefono, 'valor'):
+            data['telefono'] = instance.telefono.valor
+        else:
+            data['telefono'] = str(telefono or '')
         return data

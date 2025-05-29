@@ -356,6 +356,7 @@ classDiagram
         -fecha: Date
         -total: Float
         -estado: String
+        -creado_por: String
     }
     
     class ItemPedido {
@@ -371,6 +372,15 @@ classDiagram
         -ingrediente_id: Integer
         -cantidad: Float
     }
+
+    class Usuario {
+        -id: Integer
+        -username: String
+        -password: String
+        -nombre: String
+        -rol: String
+        -activo: Boolean
+    }
     
     Pedido "1" -- "*" ItemPedido
     ItemPedido "*" -- "1" Menu
@@ -378,6 +388,7 @@ classDiagram
     MenuIngrediente -- Menu
     MenuIngrediente -- Ingrediente
     Pedido "*" -- "1" Cliente
+    Pedido "*" -- "1" Usuario : creado_por
 ```
 
 ### Sistema Refactorizado: Modelo Expandido (DCR)
@@ -678,12 +689,28 @@ classDiagram
         -horaInicio: Date
     }
 
+    class Usuario {
+        -id: string
+        -username: string
+        -password: string
+        -nombre: string
+        -apellido: string
+        -rol: string
+        -telefono: string
+        -email: string
+        -fechaRegistro: Date
+        -ultimaSesion: Date
+        -direccion: string
+        -activo: boolean
+    }
+
     %% Relaciones de herencia
     EntidadBase <|-- Cliente
     EntidadBase <|-- Ingrediente
     EntidadBase <|-- Menu
     EntidadBase <|-- Pedido
     EntidadBase <|-- Mesa
+    EntidadBase <|-- Usuario
 
     %% Implementación de interfaces
     IClienteRepository <|.. ClienteRepositoryImpl
@@ -716,37 +743,7 @@ classDiagram
     Pedido *-- ItemPedido : contiene
     Menu *-- MenuIngrediente : contiene
     DeliveryPedido -- Pedido : extiende
-
-    %% Notas para patrones de diseño
-    class IRepository~T~ {
-        <<Interface>>
-        Repository Pattern - Abstracción para acceso a datos
-    }
-
-    class PedidoFactory {
-        <<Factory Method Pattern>>
-        Crea diferentes tipos de pedidos
-    }
-
-    class DashboardFacade {
-        <<Facade Pattern>>
-        Simplifica interacción con subsistemas analíticos
-    }
-
-    class PedidoState {
-        <<State Pattern>>
-        Cambia comportamiento según estado
-    }
-
-    class IPagoProcesador {
-        <<Strategy Pattern>>
-        Algoritmos intercambiables para procesar pagos
-    }
-
-    class INotificationObserver {
-        <<Observer Pattern>>
-        Notificación de eventos a múltiples observadores
-    }
+    Pedido "*" -- "1" Usuario : creado_por
 ```
 
 ## Diagramas MER
@@ -769,6 +766,7 @@ erDiagram
         date fecha
         float total
         string estado
+        int usuario_id FK
     }
     
     MENU {
@@ -800,12 +798,22 @@ erDiagram
         float cantidad
     }
     
+    USUARIO {
+        int id PK
+        string username
+        string password
+        string nombre
+        string rol
+        boolean activo
+    }
+    
     CLIENTE ||--o{ PEDIDO : realiza
     PEDIDO ||--o{ ITEM_PEDIDO : contiene
     ITEM_PEDIDO }o--|| MENU : referencia
     MENU }o--o{ INGREDIENTE : requiere
     MENU_INGREDIENTE }|--|| MENU : pertenece
     MENU_INGREDIENTE }|--|| INGREDIENTE : usa
+    PEDIDO }o--|| USUARIO : creado_por
 ```
 
 ### Sistema Refactorizado: Modelo Entidad-Relación Completo (MERR)
@@ -951,9 +959,14 @@ erDiagram
         string username
         string password
         string nombre
+        string apellido
         string rol
+        string telefono
+        string email
+        datetime fecha_registro
+        datetime ultima_sesion
+        string direccion
         boolean activo
-        datetime ultimo_acceso
     }
     
     CLIENTE ||--o{ PEDIDO : realiza
@@ -1027,6 +1040,16 @@ classDiagram
         fecha: "2023-10-20"
         total: 8900
         estado: "completado"
+        usuario_id: 3
+    }
+
+    class Usuario_Carlos {
+        id: 3
+        username: "carlos"
+        password: "[encrypted]"
+        nombre: "Carlos Rodríguez"
+        rol: "mesero"
+        activo: true
     }
     
     class ItemPedido_Pizza {
@@ -1044,6 +1067,7 @@ classDiagram
     Menu_PizzaMargarita --> MenuIngrediente_PizzaQueso
     MenuIngrediente_PizzaTomate --> Ingrediente_Tomate
     MenuIngrediente_PizzaQueso --> Ingrediente_Queso
+    Pedido_1234 --> Usuario_Carlos : creado_por
 ```
 
 ### Sistema Refactorizado: Instancias Avanzadas (DOR)
@@ -1123,6 +1147,21 @@ classDiagram
         tipo: "local"
     }
     
+    class Usuario_Carlos {
+        id: 3
+        username: "carlos"
+        password: "[encrypted]"
+        nombre: "Carlos Rodríguez"
+        apellido: "Rodríguez"
+        rol: "mesero"
+        telefono: "912345679"
+        email: "carlos@email.com"
+        fecha_registro: "2023-01-01T10:00:00"
+        ultima_sesion: "2023-10-20T19:00:00"
+        direccion: "Calle Falsa 123"
+        activo: true
+    }
+    
     class ItemPedido_Pizza {
         id: 1
         pedido_id: 1234
@@ -1164,16 +1203,6 @@ classDiagram
         datos_fiscales: "JSON-vacío"
     }
     
-    class Usuario_Carlos {
-        id: 3
-        username: "carlos"
-        password: "[encrypted]"
-        nombre: "Carlos Rodríguez"
-        rol: "mesero"
-        activo: true
-        ultimo_acceso: "2023-10-20T19:00:00"
-    }
-    
     Pedido_1234 --> Cliente_Maria
     Pedido_1234 --> Mesa_5
     Pedido_1234 --> ItemPedido_Pizza
@@ -1183,7 +1212,7 @@ classDiagram
     Pedido_1234 --> Transaccion_T567
     Transaccion_T567 --> MedioPago_Tarjeta
     Transaccion_T567 --> Comprobante_B2345
-    Pedido_1234 --> Usuario_Carlos
+    Pedido_1234 --> Usuario_Carlos : creado_por
 ```
 
 ## Diagramas de Componentes
@@ -1198,6 +1227,7 @@ flowchart TD
     Menus["Módulo de Menús"]
     Pedidos["Módulo de Pedidos"]
     Reportes["Módulo de Reportes"]
+    Usuarios["Módulo de Usuarios"]
     DB[(Base de Datos SQLite)]
     
     App --- Clientes
@@ -1205,12 +1235,14 @@ flowchart TD
     App --- Menus
     App --- Pedidos
     App --- Reportes
+    App --- Usuarios
     
     Clientes --- DB
     Ingredientes --- DB
     Menus --- DB
     Pedidos --- DB
     Reportes --- DB
+    Usuarios --- DB
 ```
 
 ### Sistema Refactorizado: Componentes Distribuidos (DCOR)
@@ -1223,6 +1255,7 @@ flowchart TD
         Estado["Gestión de Estado"]
         ApiClient["Servicios API"]
         Router["Router"]
+        UsuariosUI["Gestión de Usuarios"]
     end
     
     subgraph "Backend (Servidor)"
@@ -1231,6 +1264,7 @@ flowchart TD
         ApiControllers["Controladores API"]
         Services["Servicios"]
         Repos["Repositories"]
+        UsuariosService["Servicio de Usuarios"]
     end
     
     subgraph "Capa de Base de Datos"
@@ -1241,12 +1275,15 @@ flowchart TD
     subgraph "Servicios Externos"
         DeliveryAPI["APIs de Delivery"]
         PaymentProcessors["Procesadores de Pago"]
+        GoogleOAuth["Google OAuth2"]
     end
     
     ReactApp --- UI
     ReactApp --- Estado
     ReactApp --- Router
     Estado --- ApiClient
+    ReactApp --- UsuariosUI
+    UsuariosUI --- ApiClient
     
     ApiClient ---|"HTTP/JSON"| DjangoAPI
     
@@ -1254,19 +1291,23 @@ flowchart TD
     DjangoAPI --- ApiControllers
     ApiControllers --- Services
     Services --- Repos
+    Services --- UsuariosService
+    UsuariosService --- Repos
     
     Repos --- ORM
     ORM --- DB
     
     Services ---|"HTTP/JSON"| DeliveryAPI
     Services ---|"HTTP/JSON"| PaymentProcessors
+    Auth --- GoogleOAuth
     
     ReactApp -.- ReactNote[("SPA accesible desde<br>múltiples dispositivos")]
     Auth -.- AuthNote[("Autenticación basada<br>en tokens JWT con<br>diferentes roles")]
     DeliveryAPI -.- DeliveryNote[("Integración con<br>plataformas externas<br>como Rappi, Uber Eats")]
+    GoogleOAuth -.- OAuthNote[("Login exclusivo con<br>Google OAuth2")]
     
     classDef note fill:#f9f9f9,stroke:#ccc,stroke-width:1px,color:#666
-    class ReactNote,AuthNote,DeliveryNote note
+    class ReactNote,AuthNote,DeliveryNote,OAuthNote note
 ```
 
 ## Resumen de Mejoras
