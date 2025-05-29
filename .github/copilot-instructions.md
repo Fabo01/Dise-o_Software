@@ -13,3 +13,5 @@
 - Idioma principal para documentación, comentarios y UI: español.
 - Multiplataforma: accesible desde navegadores modernos y dispositivos móviles (no requiere app nativa).
 - Priorizar mantenibilidad, testabilidad y facilidad de futuras expansiones (integración con delivery, pagos, etc).
+- Cada nueva funcionalidad o implementación debe incluir pruebas automatizadas escritas bajo el enfoque BDD (Behavior Driven Development), utilizando un framework BDD para Python/Django (por ejemplo, Behave o pytest-bdd).
+- No se permite el uso de TDD puro ni tests unitarios tradicionales fuera del enfoque BDD.

@@ -1,3 +1,8 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+from Backend.Presentacion.Controladores.Ingrediente_Controlador import IngredienteViewSet
 
-# from Backend.Presentacion.Controladores.Ingrediente_Controlador import IngredienteAPI, IngredienteCategoriaAPI
+router = DefaultRouter()
+router.register(r'ingredientes', IngredienteViewSet, basename='ingrediente')
+
+urlpatterns = router.urls

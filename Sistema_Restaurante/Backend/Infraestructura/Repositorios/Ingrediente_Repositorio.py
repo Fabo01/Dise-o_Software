@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import F, Q
 
 from Backend.Aplicacion.Interfaces.IIngrediente_Repositorio import IIngrediente_Repositorio
 from Backend.Dominio.Entidades.Ingrediente_Entidad import IngredienteEntidad
@@ -73,16 +73,35 @@ class IngredienteRepositorio(IIngrediente_Repositorio):
         ingredientes_modelo = IngredienteModelo.objects.filter(estado="activo")
         return [self._convertir_a_entidad(ingrediente) for ingrediente in ingredientes_modelo]
     
+    def crear(self, ingrediente):
+        """
+        Crea un nuevo ingrediente
+        """
+        return self.guardar(ingrediente)
+
+    def actualizar(self, ingrediente):
+        """
+        Actualiza un ingrediente existente
+        """
+        return self.guardar(ingrediente)
+
+    def obtener_por_id(self, id):
+        """
+        Obtiene un ingrediente por su ID
+        """
+        return self.buscar_por_id(id)
+
+    def listar(self):
+        """
+        Lista todos los ingredientes
+        """
+        return self.listar_todos()
+
     def eliminar(self, id):
         """
         Elimina un ingrediente por su ID
         """
-        try:
-            ingrediente_modelo = IngredienteModelo.objects.get(id=id)
-            ingrediente_modelo.delete()
-            return True
-        except IngredienteModelo.DoesNotExist:
-            return False
+        return super().eliminar(id)
         
     def actualizar_stock(self, id, cantidad):
         """
@@ -135,10 +154,10 @@ class IngredienteRepositorio(IIngrediente_Repositorio):
         """
         return IngredienteEntidad(
             nombre=ingrediente_modelo.nombre,
-            cantidad=ingrediente_modelo.cantidad,
+            cantidad=float(ingrediente_modelo.cantidad),
             unidad_medida=ingrediente_modelo.unidad_medida,
             fecha_vencimiento=ingrediente_modelo.fecha_vencimiento,
-            estado=ingrediente_modelo.estado,
-            nivel_critico=ingrediente_modelo.nivel_critico,
-            tipo=ingrediente_modelo.tipo
+            nivel_critico=float(ingrediente_modelo.nivel_critico) if ingrediente_modelo.nivel_critico else None,
+            tipo=ingrediente_modelo.tipo,
+            imagen=str(ingrediente_modelo.imagen) if ingrediente_modelo.imagen else None
         )
