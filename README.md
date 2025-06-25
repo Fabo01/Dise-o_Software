@@ -2,14 +2,14 @@
 
 > **Índice de Diagramas**
 >
-> - [Diagramas de Arquitectura](arquitectura/)
-> - [Diagramas de Casos de Uso](casos_uso/)
-> - [Diagramas de Clases](clases/)
-> - [Diagramas MER](mer/)
-> - [Diagramas de Objetos](objetos/)
-> - [Diagramas de Componentes](componentes/)
-> - [Diagramas de Patrones](patrones/)
-> - [Diagramas de Secuencia](secuencia/)
+> - [Diagramas de Arquitectura](/Sistema_Restaurante/Docs/Diagramas/arquitectura/)
+> - [Diagramas de Casos de Uso](/Sistema_Restaurante/Docs/Diagramas/casos_uso/)
+> - [Diagramas de Clases](Sistema_Restaurante/Docs/Diagramas/clases/)
+> - [Diagramas MER](Sistema_Restaurante/Docs/Diagramas/mer/)
+> - [Diagramas de Objetos](Sistema_Restaurante/Docs/Diagramas/objetos/)
+> - [Diagramas de Componentes](Sistema_Restaurante/Docs/Diagramas/componentes/)
+> - [Diagramas de Patrones](Sistema_Restaurante/Docs/Diagramas/patrones/)
+> - [Diagramas de Secuencia](Sistema_Restaurante/Docs/Diagramas/secuencia/)
 
 Este proyecto consiste en la refactorización de un sistema de gestión de restaurante, migrando de una aplicación de escritorio (Python + customtkinter) a una plataforma web moderna con React en el frontend y Django en el backend, siguiendo principios de Clean Architecture.
 
