@@ -1,5 +1,16 @@
 # Sistema de Gestión de Clientes y Pedidos en un Restaurante
 
+> **Índice de Diagramas**
+>
+> - [Diagramas de Arquitectura](arquitectura/)
+> - [Diagramas de Casos de Uso](casos_uso/)
+> - [Diagramas de Clases](clases/)
+> - [Diagramas MER](mer/)
+> - [Diagramas de Objetos](objetos/)
+> - [Diagramas de Componentes](componentes/)
+> - [Diagramas de Patrones](patrones/)
+> - [Diagramas de Secuencia](secuencia/)
+
 Este proyecto consiste en la refactorización de un sistema de gestión de restaurante, migrando de una aplicación de escritorio (Python + customtkinter) a una plataforma web moderna con React en el frontend y Django en el backend, siguiendo principios de Clean Architecture.
 
 ## Configuración del Entorno de Desarrollo
@@ -425,3 +436,14 @@ Este patrón se utiliza en toda la aplicación para inyectar dependencias, lo qu
 ## Metodología del Proyecto
 
 El proyecto sigue la metodología Scrum con 5 integrantes dedicando 5 horas semanales cada uno. Se han definido 4 sprints (un Sprint 0 de 2 semanas y 3 sprints de 4 semanas cada uno) para completar la refactorización.
+
+## Índice de Diagramas
+
+- [Diagramas de Arquitectura](arquitectura/)
+- [Diagramas de Casos de Uso](casos_uso/)
+- [Diagramas de Clases](clases/)
+- [Diagramas MER](mer/)
+- [Diagramas de Objetos](objetos/)
+- [Diagramas de Componentes](componentes/)
+- [Diagramas de Patrones](patrones/)
+- [Diagramas de Secuencia](secuencia/)
