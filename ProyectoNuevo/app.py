@@ -2,8 +2,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from tkinter import messagebox 
 import customtkinter as ctk
-from crud.ingrediente_crud import IngredienteCRUD
 from crud.cliente_crud import ClienteCRUD
+from crud.ingrediente_crud import IngredienteCRUD
 from crud.menu_crud import MenuCRUD
 from crud.pedido_crud import PedidoCRUD
 from database import get_db, engine, Base
@@ -51,6 +51,12 @@ class MainApp(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
+        # Instancia los CRUDs UNA SOLA VEZ
+        self.cliente_crud = ClienteCRUD
+        self.ingrediente_crud = IngredienteCRUD
+        self.menu_crud = MenuCRUD
+        self.pedido_crud = PedidoCRUD
+
     def create_menu_button(self, text, panel_name, row):
         button = ctk.CTkButton(
             self.menu_frame,
@@ -68,7 +74,16 @@ class MainApp(ctk.CTk):
         for widget in self.main_frame.winfo_children():
             widget.destroy()
         db_session = next(get_db())
-        panel = PanelFactory.create_panel(panel_name, self.main_frame, db_session)
+        # Inyecta los CRUDs según el panel
+        panel = PanelFactory.create_panel(
+            panel_name,
+            self.main_frame,
+            db_session,
+            cliente_crud=self.cliente_crud,
+            ingrediente_crud=self.ingrediente_crud,
+            menu_crud=self.menu_crud,
+            pedido_crud=self.pedido_crud
+        )
         panel.grid(row=0, column=0, sticky="nsew")
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_rowconfigure(0, weight=1)
@@ -77,26 +92,27 @@ class MainApp(ctk.CTk):
 
 class PanelFactory:  ## utilizacion de factory method para crear los paneles de la aplicacion de manera dinamica 
     @staticmethod
-    def create_panel(panel_name, parent, db):
+    def create_panel(panel_name, parent, db, cliente_crud=None, ingrediente_crud=None, menu_crud=None, pedido_crud=None):
         if panel_name == "ClientePanel":
-            return ClientePanel(parent, db)
+            return ClientePanel(parent, db, cliente_crud)
         elif panel_name == "IngredientePanel":
-            return IngredientePanel(parent, db)
+            return IngredientePanel(parent, db, ingrediente_crud)
         elif panel_name == "MenuPanel":
-            return MenuPanel(parent, db)
+            return MenuPanel(parent, db, menu_crud)
         elif panel_name == "PanelCompra":
-            return PanelCompra(parent, db)
+            return PanelCompra(parent, db, menu_crud, cliente_crud)
         elif panel_name == "PanelPedido":
-            return PanelPedido(parent, db)
+            return PanelPedido(parent, db, pedido_crud)
         elif panel_name == "GraficosPanel":
             return GraficosPanel(parent, db)
         else:
             raise ValueError(f"Panel '{panel_name}' no reconocido")
 
 class ClientePanel(ctk.CTkFrame):
-    def __init__(self, parent, db):
+    def __init__(self, parent, db, cliente_crud):
         super().__init__(parent)
         self.db = db
+        self.cliente_crud = cliente_crud
         self.configure(fg_color="#1c1c1c")
 
         # Título
@@ -154,7 +170,7 @@ class ClientePanel(ctk.CTkFrame):
             messagebox.showerror("Error", "Todos los campos son obligatorios.")
             return
 
-        cliente_existente = ClienteCRUD.get_cliente_by_rut(self.db, rut)
+        cliente_existente = self.cliente_crud.get_cliente_by_rut(self.db, rut)
         if (cliente_existente):
             messagebox.showinfo("Error", f"El cliente con el rut '{rut}' ya existe.")
             return

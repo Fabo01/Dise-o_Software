@@ -82,3 +82,16 @@ gestorPedidos.subscribe((pedidos) => {
 document.addEventListener('DOMContentLoaded', () => {
   renderCuentas(gestorPedidos.pedidos);
 });
+
+class ClientePanel(ctk.CTkFrame) {
+  constructor(parent, db, cliente_crud) {
+    super(parent);
+    this.db = db;
+    this.cliente_crud = cliente_crud;
+  }
+
+  add_cliente() {
+    // Usa self.cliente_crud en vez de ClienteCRUD
+    const cliente_existente = this.cliente_crud.get_cliente_by_rut(this.db, rut);
+  }
+}
