@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Gestor Restaurante ER</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
 </head>
 <body>
 
     <aside class="sidebar">
-        <img src="img/Exclaviza.png" alt="Logo Restaurante" class="logo">
+        <img src="/static/img/Exclaviza.png" alt="Logo Restaurante" class="logo">
         <nav>
             <ul>
                 <li><button class="nav-link" data-section="dashboard">Dashboard</button></li>
@@ -200,9 +200,35 @@
         <!-- Clientes -->
         <section id="clientes" class="seccion oculto">
             <h2>Gestión de Clientes</h2>
-            <p>Registra, edita o elimina clientes.</p>
-        </section>
+            <form id="formCrearCliente">
+                <input type="text" id="nombre" placeholder="Nombre" required>
+                <input type="text" id="rut" placeholder="RUT" required>
+                <input type="email" id="correo" placeholder="Correo" required>
+                <input type="text" id="telefono" placeholder="Teléfono">
+                <input type="text" id="direccion" placeholder="Dirección">
+                <button type="submit">Registrar Cliente</button>
+            </form>
 
+            <h3>Buscar Cliente</h3>
+            <input type="text" id="busquedaCliente" placeholder="Buscar por nombre o RUT">
+            <button id="btnBuscarCliente">Buscar</button>
+
+            <h3>Lista de Clientes</h3>
+            <table id="tablaClientes" border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>RUT</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
         <!-- Usuarios -->
         <section id="usuarios" class="seccion oculto">
             <h2>Gestión de Usuarios</h2>
@@ -210,7 +236,8 @@
         </section>
     </main>
 
-    <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="/static/js/main.js"></script>
+    <script type="module" src="/static/js/dashboard.js"></script>
+    <script type="module" src="/static/js/clientes.js"></script>
 </body>
 </html>

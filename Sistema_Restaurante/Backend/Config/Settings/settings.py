@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Directorio base
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 # Configuración de seguridad
 SECRET_KEY = 'django-insecure-abcdefghijklmnopqrstuvwxyz1234567890'
@@ -112,7 +112,7 @@ TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'Frontend')]
 
 # Configuración para archivos subidos
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Frontend/Static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/Frontend/Static/')
 
 # Tipo de campo por defecto para claves primarias
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
