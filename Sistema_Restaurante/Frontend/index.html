@@ -27,6 +27,7 @@
 
                 <li class="seccion-titulo">--Administración Avanzada--</li>
                 <li><button class="nav-link" data-section="usuarios">Gestión de Usuarios</button></li>
+                <li><button class="nav-link" data-section="inventario">Inventario</button></li>
             </ul>
         </nav>
         <footer class="creditos">
@@ -64,6 +65,9 @@
         <section id="pedidos" class="seccion oculto">
             <h2>Gestión de Pedidos</h2>
             <form id="formPedido">
+                <select id="inputClientePedido" required>
+                    <option value="">Selecciona un cliente</option>
+                </select>
                 <select id="inputPedido" required></select>
                 <button type="submit">Agregar Pedido</button>
             </form>
@@ -79,6 +83,8 @@
                     <tr>
                         <th>Pedido</th>
                         <th>Estado</th>
+                        <th>Cliente</th>
+                        <th>Mesa</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -128,19 +134,15 @@
             <table id="tablaCuentas">
                 <thead>
                     <tr>
-                        <th>Pedido</th>
-                        <th>Precio</th>
-                        <th>Estado</th>
+                        <th>Mesa</th>
+                        <th>Pedidos</th>
+                        <th>Subtotal</th>
+                        <th>IVA (19%)</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" style="text-align:right;font-weight:bold;">
-                            Total: <span id="totalCuentas">$0</span>
-                        </td>
-                    </tr>
-                </tfoot>
+                <tbody> </tbody>
             </table>
         </section>
 
@@ -194,50 +196,118 @@
         <!-- Mesas -->
         <section id="mesas" class="seccion oculto">
             <h2>Gestión de Mesas</h2>
-            <p>Configura y organiza las mesas del local.</p>
-        </section>
-
-        <!-- Clientes -->
-        <section id="clientes" class="seccion oculto">
-            <h2>Gestión de Clientes</h2>
-            <form id="formCrearCliente">
-                <input type="text" id="nombre" placeholder="Nombre" required>
-                <input type="text" id="rut" placeholder="RUT" required>
-                <input type="email" id="correo" placeholder="Correo" required>
-                <input type="text" id="telefono" placeholder="Teléfono">
-                <input type="text" id="direccion" placeholder="Dirección">
-                <button type="submit">Registrar Cliente</button>
+            <form id="formMesa">
+                <input type="text" id="inputMesa" placeholder="Nombre o número de mesa" required>
+                <button type="submit">Agregar Mesa</button>
             </form>
-
-            <h3>Buscar Cliente</h3>
-            <input type="text" id="busquedaCliente" placeholder="Buscar por nombre o RUT">
-            <button id="btnBuscarCliente">Buscar</button>
-
-            <h3>Lista de Clientes</h3>
-            <table id="tablaClientes" border="1">
+            <table id="tablaMesas">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>RUT</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Dirección</th>
+                        <th>Mesa</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </section>
+
+        <!-- Clientes -->
+        <section id="clientes" class="seccion oculto">
+            <h2>Gestión de Clientes</h2>
+            <form id="formCliente">
+                <input type="text" id="inputNombreCliente" placeholder="Nombre" required>
+                <input type="text" id="inputApellidoCliente" placeholder="Apellido" required>
+                <input type="text" id="inputRutCliente" placeholder="RUT" required>
+                <select id="selectMesaCliente" required>
+                    <option value="">Asignar Mesa</option>
+                </select>
+                <button type="submit">Agregar Cliente</button>
+            </form>
+            <table id="tablaClientes">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>RUT</th>
+                        <th>Mesa</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
         <!-- Usuarios -->
         <section id="usuarios" class="seccion oculto">
-            <h2>Gestión de Usuarios</h2>
-            <p>Administración avanzada para roles y permisos.</p>
+          <h2>Gestión de Usuarios</h2>
+          <form id="formUsuario" class="form-gestion">
+            <input type="text" id="inputNombreUsuario" placeholder="Nombre*" required>
+            <input type="text" id="inputApellidoUsuario" placeholder="Apellido">
+            <input type="email" id="inputCorreoUsuario" placeholder="Correo electrónico*" required>
+            <input type="text" id="inputTelefonoUsuario" placeholder="Teléfono">
+            <input type="text" id="inputDireccionUsuario" placeholder="Dirección">
+            <input type="password" id="inputPasswordUsuario" placeholder="Contraseña*" required>
+            <select id="selectRolUsuario" required>
+              <option value="">Rol*</option>
+              <option value="mesero">Mesero</option>
+              <option value="cocinero">Cocinero</option>
+              <option value="administrador">Administrador</option>
+              <option value="gerente">Gerente</option>
+            </select>
+            <input type="text" id="inputRutUsuario" placeholder="RUT*" required>
+            <input type="text" id="inputUsernameUsuario" placeholder="Usuario*" required>
+            <button type="submit">Agregar Usuario</button>
+          </form>
+          <table id="tablaUsuarios" class="tabla-gestion">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <!-- Inventario de Ingredientes -->
+        <section id="inventario" class="seccion oculto">
+          <h2>Inventario de Ingredientes</h2>
+          <button id="btnMostrarIngredientes" type="button" style="margin-bottom: 16px;">Mostrar Ingredientes</button>
+          <table id="tablaIngredientes">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Unidad de Medida</th>
+                <th>Categoría</th>
+                <th>Fecha Vencimiento</th>
+                <th>Nivel Crítico</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <form id="formIngrediente">
+            <input type="text" id="nombreIngrediente" placeholder="Nombre" required>
+            <input type="number" id="cantidadIngrediente" placeholder="Cantidad" required>
+            <input type="text" id="unidadMedidaIngrediente" placeholder="Unidad de Medida" required>
+            <input type="text" id="categoriaIngrediente" placeholder="Categoría" required>
+            <input type="date" id="fechaVencimientoIngrediente" placeholder="Fecha de Vencimiento" required>
+            <input type="number" id="nivelCriticoIngrediente" placeholder="Nivel Crítico" required>
+            <input type="text" id="tipoIngrediente" placeholder="Tipo" required>
+            <button type="submit">Agregar Ingrediente</button>
+          </form>
         </section>
     </main>
 
     <script type="module" src="/static/js/main.js"></script>
     <script type="module" src="/static/js/dashboard.js"></script>
-    <script type="module" src="/static/js/clientes.js"></script>
+    <script type="module" src="/static/js/gestionExtra.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>

@@ -1,38 +1,45 @@
+from datetime import datetime
 from Backend.Dominio.Entidades.Usuario_Entidad import UsuarioEntidad
 from Backend.Dominio.Interfaces.IEntidad_Factory import IEntidadFactory
-from datetime import datetime
+from Backend.Dominio.Objetos_Valor.rut import Rut
+from Backend.Dominio.Objetos_Valor.TelefonoVO import TelefonoVO
 
 class UsuarioFactory(IEntidadFactory):
-
-    def construir_username(self, nombre, apellido, fecha_registro=None):
-        """
-        Construye el username con la primera letra del nombre, el apellido y el año.
-        Ejemplo: Juan Pérez, 2025 -> jperez2025
-        """
-        inicial = nombre[0].lower() if nombre else ''
-        apellido_limpio = apellido.replace(' ', '').lower() if apellido else ''
+    def crear(self, rut, username, nombre, apellido, rol, email, telefono, direccion, password, fecha_registro=None, ultima_sesion=None):
         if fecha_registro is None:
-            fecha_registro = datetime.now()
-        anio = fecha_registro.year
-        return f"{inicial}{apellido_limpio}{anio}"
-
-    def crear(self, nombre, apellido, password, email, rol, telefono, fecha_registro=None, ultima_sesion=None, direccion=None):
-        nombre = nombre.strip().title() if nombre else ''
-        apellido = apellido.strip().title() if apellido else ''
-        username = self.construir_username(nombre, apellido, fecha_registro)
-        if fecha_registro is None:
-            fecha_registro = datetime.now()
+            from django.utils import timezone
+            fecha_registro = timezone.now()
         if ultima_sesion is None:
-            ultima_sesion = datetime.now()
+            from django.utils import timezone
+            ultima_sesion = timezone.now()
+        # Convierte a VO si es string
+        if isinstance(rut, str):
+            rut = Rut(rut)
+        if telefono and isinstance(telefono, str):
+            telefono = TelefonoVO(telefono)
         return UsuarioEntidad(
+            rut=rut,
             username=username,
-            password=password,
-            email=email,
             nombre=nombre,
             apellido=apellido,
             rol=rol,
+            email=email,
             telefono=telefono,
+            direccion=direccion,
+            password=password,
             fecha_registro=fecha_registro,
-            ultima_sesion=ultima_sesion,
-            direccion=direccion
+            ultima_sesion=ultima_sesion
         )
+
+class Rut:
+    def __init__(self, valor):
+        # Aquí puedes agregar validación real de RUT
+        self.valor = valor
+
+    @staticmethod
+    def validar(valor):
+        # Lógica de validación de RUT (opcional)
+        return True  # O tu lógica real
+
+    def __str__(self):
+        return self.valor

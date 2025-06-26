@@ -1,7 +1,7 @@
 from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
 from Backend.Infraestructura.Repositorios.Usuario_Repositorio import UsuarioRepositorio
 from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
-from Backend.Dominio.Factories.Usuario_Factory import UsuarioFactory  # Importa la factory
+from Backend.Dominio.Factories.Usuario_Factory import UsuarioFactory
 
 class UsuarioServicio:
     """
@@ -89,6 +89,21 @@ class UsuarioServicio:
         self.usuario_repositorio.guardar(usuario)
         self.observer_service.notificar("Contraseña actualizada", usuario)
         return usuario
+
+    def registrar_usuario_con_factory(self, datos):
+        # Asegúrate de que 'rut' está en datos
+        usuario_entidad = UsuarioFactory().crear(
+            rut=datos['rut'],
+            username=datos['username'],
+            nombre=datos['nombre'],
+            apellido=datos.get('apellido', ''),
+            rol=datos['rol'],
+            email=datos['email'],
+            telefono=datos.get('telefono', ''),
+            direccion=datos.get('direccion', ''),
+            password=datos['password']
+        )
+        return self.usuario_repositorio.guardar(usuario_entidad)
 
 
 

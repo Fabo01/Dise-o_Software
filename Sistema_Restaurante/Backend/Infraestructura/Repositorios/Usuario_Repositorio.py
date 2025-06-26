@@ -68,6 +68,12 @@ class UsuarioRepositorio(IUsuarioRepositorio):
         except UsuarioModelo.DoesNotExist:
             return False
         
+    def buscar_por_id(self, id):
+        """
+        Busca un usuario por su identificador principal (RUT).
+        """
+        return self.buscar_por_rut(id)
+
     def _convertir_a_entidad(self, usuario_modelo):
         entidad = UsuarioEntidad(
             rut=usuario_modelo.rut,
@@ -83,3 +89,14 @@ class UsuarioRepositorio(IUsuarioRepositorio):
             direccion=usuario_modelo.direccion
         )
         return entidad
+
+    def obtener_valor_rut(self, usuario):
+        """
+        Devuelve el RUT del usuario como string, independientemente de si es un VO o un string.
+        """
+        if hasattr(usuario, 'rut'):
+            rut = usuario.rut
+            if hasattr(rut, 'valor'):
+                return rut.valor
+            return str(rut)
+        return None
