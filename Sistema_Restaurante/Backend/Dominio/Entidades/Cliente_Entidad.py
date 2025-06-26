@@ -1,6 +1,11 @@
 from datetime import datetime
+from .EntidadBase import EntidadBase
+from ..Objetos_Valor.Correo_VO import CorreoVO
+from ..Objetos_Valor.RutVO import RutVO
+from ..Objetos_Valor.TelefonoVO import TelefonoVO
+from ..Excepciones.DominioExcepcion import ValidacionExcepcion
 
-class ClienteEntidad:
+class ClienteEntidad(EntidadBase):
     """
     Entidad de dominio que representa un cliente del restaurante.
     Contiene las reglas de negocio y validaciones.
@@ -15,44 +20,67 @@ class ClienteEntidad:
             rut (str): RUT del cliente, debe tener un formato válido
             telefono (str, opcional): Teléfono del cliente
             direccion (str, opcional): Dirección del cliente
+            estado (str, opcional): Estado del cliente, por defecto "activo"
+            ultima_visita (str): Fecha de la ultima visita del cliente
+        Raises:
+            ValidacionExcepcion: Si los datos proporcionados no son válidos
         """
+        super().__init__()
+        
         if not nombre:
-            raise ValueError("El nombre del cliente es obligatorio")
-        if not self._validar_rut(rut):
-            raise ValueError(f"RUT inválido: {rut}")
-            
-        self.id = None
-        self.nombre = nombre
-        self.correo = correo
-        self.rut = rut
-        self.telefono = telefono
-        self.direccion = direccion
-        self.estado = "activo"
-        self.fecha_registro = datetime.now()
-        self.ultima_visita = datetime.now()
+            raise ValidacionExcepcion("El nombre del cliente es obligatorio")
+        
+        self._nombre = nombre
+        self._direccion = direccion
+        self._ultima_visita = datetime.now()
+        self._estado = "activo"  # Estado inicial
+        
+        # Usar objetos de valor para validación y encapsulación
+        try:
+            self._correo = CorreoVO(correo)
+            self._rut = RutVO(rut)  # RUT como objeto de valor, inmutable
+            self._telefono = TelefonoVO(telefono)
+        except Exception as e:
+            raise ValidacionExcepcion(str(e))
 
-    def _validar_rut(self, rut):
-        """
-        Valida que el RUT tenga un formato correcto.
-        
-        Args:
-            rut (str): RUT a validar
-            
-        Returns:
-            bool: True si el RUT es válido, False en caso contrario
-        """
-        if not rut or len(rut) < 8 or len(rut) > 10:
-            return False
-        return '-' in rut
-            
-    def desactivar(self):
-        """Desactiva al cliente"""
-        self.estado = "inactivo"
-        
-    def activar(self):
-        """Activa al cliente"""
-        self.estado = "activo"
-            
+    # Getters
+    @property
+    def nombre(self):
+        return self._nombre
+    
+    @property
+    def correo(self):
+        return self._correo.valor
+    
+    @property
+    def rut(self):
+        return self._rut.valor
+    
+    @property
+    def telefono(self):
+        return self._telefono.valor
+    
+    @property
+    def direccion(self):
+        return self._direccion
+    
+    @property
+    def ultima_visita(self):
+        return self._ultima_visita
+    
+    @ultima_visita.setter
+    def ultima_visita(self, valor):
+        self._ultima_visita = valor
+    
+    @property
+    def estado(self):
+        return self._estado
+    
+    @estado.setter
+    def estado(self, valor):
+        self._estado = valor
+    
+    # Métodos de negocio
     def actualizar_datos(self, nombre, correo, telefono=None, direccion=None):
         """
         Actualiza los datos del cliente
@@ -62,18 +90,32 @@ class ClienteEntidad:
             correo (str): Nuevo correo
             telefono (str, opcional): Nuevo teléfono
             direccion (str, opcional): Nueva dirección
+            
+        Raises:
+            ValidacionExcepcion: Si los datos proporcionados no son válidos
         """
         if not nombre:
-            raise ValueError("El nombre es obligatorio")
+            raise ValidacionExcepcion("El nombre es obligatorio")
         
-        self.nombre = nombre
-        self.correo = correo
+        self._nombre = nombre
         
-        if telefono is not None:
-            self.telefono = telefono
-        
-        if direccion is not None:
-            self.direccion = direccion
+        try:
+            # Permitir que 'correo' sea str o CorreoVO
+            if isinstance(correo, CorreoVO):
+                correo_valor = correo.valor
+            else:
+                correo_valor = correo
+            self._correo = CorreoVO(correo_valor)
+            
+            if telefono is not None:
+                self._telefono = TelefonoVO(telefono)
+            
+            if direccion is not None:
+                self._direccion = direccion
+                
+            self.actualizar_fecha()
+        except ValueError as e:
+            raise ValidacionExcepcion(str(e))
     
     def registrar_visita(self, fecha=None):
         """
@@ -84,7 +126,8 @@ class ClienteEntidad:
         """
         if fecha is None:
             fecha = datetime.now()
-        self.ultima_visita = fecha
+        self._ultima_visita = fecha
+        self.actualizar_fecha()
 
     def __str__(self):
-        return f"{self.nombre} ({self.rut})"
+        return f"{self._nombre} ({self._rut})"

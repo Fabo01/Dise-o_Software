@@ -5,8 +5,7 @@ class ClienteDTO(BaseModel):
     """
     DTO para transferir datos de clientes entre capas
     """
-    id: Optional[int] = None
-    rut: str
+    rut: str  # RUT chileno, identificador único e inmutable
     nombre: str
     telefono: Optional[str] = None
     direccion: Optional[str] = None

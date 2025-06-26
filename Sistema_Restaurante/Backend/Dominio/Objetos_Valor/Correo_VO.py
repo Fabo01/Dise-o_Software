@@ -45,20 +45,21 @@ class CorreoVO:
             str: La dirección de correo
         """
         return self._direccion
-        
+
     def __str__(self):
+        """
+        Retorna la representación en string del objeto CorreoVO.
+        """
         return self._direccion
         
-    def __eq__(self, other):
+    def es_dominio(self, dominio):
         """
-        Compara si dos correos son iguales basándose en su dirección
+        Verifica si el correo pertenece a un dominio específico
         
         Args:
-            other (CorreoVO): El otro objeto de valor correo a comparar
+            dominio (str): Dominio a verificar (ej. "gmail.com")
             
         Returns:
-            bool: True si son iguales, False en caso contrario
+            bool: True si el correo pertenece al dominio, False en caso contrario
         """
-        if not isinstance(other, CorreoVO):
-            return False
-        return self._direccion == other._direccion
+        return self._direccion.endswith('@' + dominio.lower())

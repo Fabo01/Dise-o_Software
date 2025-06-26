@@ -143,7 +143,7 @@ El proyecto sigue una estructura de ramas basada en niveles de abstracción y re
   - Un repositorio para gestionar clientes (`Cliente_Repositorio.py`):
     ```python
     from Dominio.Entidades.cliente import Cliente
-    from Dominio.objetos_valor.correo import correo
+    from Dominio.Objetos_Valor.correo import correo
     from Infraestructura.Modelos.cliente_model import ClienteModel
 
     class ClienteRepositorio:
@@ -203,7 +203,7 @@ El proyecto sigue una estructura de ramas basada en niveles de abstracción y re
   - Un servicio para registrar un cliente (`cliente_servicio.py`):
     ```python
     from Dominio.Entidades.cliente import Cliente
-    from Dominio.objetos_valor.correo import correo
+    from Dominio.Objetos_Valor.correo import correo
     from Infraestructura.Repositorios.Cliente_Repositorio import ClienteRepositorio
 
     class ClienteServicio:

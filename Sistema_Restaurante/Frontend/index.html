@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gestor Restaurante ER</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+
+    <aside class="sidebar">
+        <img src="/static/img/Exclaviza.png" alt="Logo Restaurante" class="logo">
+        <nav>
+            <ul>
+                <li><button class="nav-link" data-section="dashboard">Dashboard</button></li>
+
+                <li class="seccion-titulo">--Pedidos--</li>
+                <li><button class="nav-link" data-section="pedidos">Pedidos</button></li>
+                <li><button class="nav-link" data-section="preparacion">Preparación Pedidos</button></li>
+                <li><button class="nav-link" data-section="listos">Lista de Pedidos</button></li>
+                <li><button class="nav-link" data-section="cuentas">Cuentas</button></li>
+
+                <li class="seccion-titulo">--Administración--</li>
+                <li><button class="nav-link" data-section="menuRestaurante">Menú Restaurante</button></li>
+                <li><button class="nav-link" data-section="mesas">Gestión de Mesas</button></li>
+                <li><button class="nav-link" data-section="clientes">Gestión de Clientes</button></li>
+
+                <li class="seccion-titulo">--Administración Avanzada--</li>
+                <li><button class="nav-link" data-section="usuarios">Gestión de Usuarios</button></li>
+            </ul>
+        </nav>
+        <footer class="creditos">
+            <span class="copyright">&copy;</span>
+            Desarrollado por esclaviza rappi
+        </footer>
+    </aside>
+
+    <main class="contenido">
+        <!-- Dashboard -->
+        <section id="dashboard" class="seccion">
+            <h1>Bienvenido al Panel de Gestión</h1>
+            <p>Resumen general del restaurante:</p>
+            <div class="dashboard-resumen">
+                <div class="card">
+                    <h3>Pedidos Pendientes</h3>
+                    <p id="resumenPendientes">0</p>
+                </div>
+                <div class="card">
+                    <h3>En Preparación</h3>
+                    <p id="resumenPreparacion">0</p>
+                </div>
+                <div class="card">
+                    <h3>Listos para Entregar</h3>
+                    <p id="resumenListos">0</p>
+                </div>
+            </div>
+            <div class="dashboard-recientes">
+                <h3>Pedidos recientes</h3>
+                <ul id="listaPedidosRecientes"></ul>
+            </div>
+        </section>
+
+        <!-- Pedidos -->
+        <section id="pedidos" class="seccion oculto">
+            <h2>Gestión de Pedidos</h2>
+            <form id="formPedido">
+                <select id="inputPedido" required></select>
+                <button type="submit">Agregar Pedido</button>
+            </form>
+            <label for="filtroEstado">Filtrar por estado:</label>
+            <select id="filtroEstado">
+                <option value="Todos">Todos</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En Preparación">En Preparación</option>
+                <option value="Listo">Listo</option>
+            </select>
+            <table id="tablaPedidos">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="estadisticas">
+                <p>Total pedidos: <span id="totalPedidos">0</span></p>
+                <p>Pendientes: <span id="countPendientes">0</span></p>
+                <p>En preparación: <span id="countPreparacion">0</span></p>
+                <p>Listos: <span id="countListos">0</span></p>
+            </div>
+        </section>
+
+        <!-- Preparación -->
+        <section id="preparacion" class="seccion oculto">
+            <h2>Pedidos en Preparación</h2>
+            <table id="tablaPreparacion">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Listos -->
+        <section id="listos" class="seccion oculto">
+            <h2>Pedidos Listos</h2>
+            <table id="tablaListos">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Cuentas -->
+        <section id="cuentas" class="seccion oculto">
+            <h2>Cuentas</h2>
+            <table id="tablaCuentas">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align:right;font-weight:bold;">
+                            Total: <span id="totalCuentas">$0</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <!-- Menú Restaurante -->
+        <section id="menuRestaurante" class="seccion oculto">
+            <h2>Menú Restaurante</h2>
+            <div class="menu-cards">
+                <div class="menu-card" data-nombre="Completo Italiano">
+                    <h4>Completo Italiano</h4>
+                    <p>Vienesa, palta, tomate, mayonesa</p>
+                    <span class="precio">$2.200</span>
+                </div>
+                <div class="menu-card" data-nombre="Empanada de Pino">
+                    <h4>Empanada de Pino</h4>
+                    <p>Carne, cebolla, huevo, aceituna, pasas</p>
+                    <span class="precio">$1.800</span>
+                </div>
+                <div class="menu-card" data-nombre="Chorrillana">
+                    <h4>Chorrillana</h4>
+                    <p>Papas fritas, carne, cebolla, huevo</p>
+                    <span class="precio">$8.500</span>
+                </div>
+                <div class="menu-card" data-nombre="Cazuela de Vacuno">
+                    <h4>Cazuela de Vacuno</h4>
+                    <p>Carne, papas, zapallo, choclo, arroz</p>
+                    <span class="precio">$6.500</span>
+                </div>
+                <div class="menu-card" data-nombre="Pastel de Choclo">
+                    <h4>Pastel de Choclo</h4>
+                    <p>Choclo, carne, pollo, huevo, aceituna</p>
+                    <span class="precio">$7.000</span>
+                </div>
+                <div class="menu-card" data-nombre="Porción de Papas Fritas">
+                    <h4>Porción de Papas Fritas</h4>
+                    <p>Papas fritas caseras</p>
+                    <span class="precio">$2.500</span>
+                </div>
+                <div class="menu-card" data-nombre="Bebida 350ml">
+                    <h4>Bebida 350ml</h4>
+                    <p>Coca-Cola, Fanta, Sprite</p>
+                    <span class="precio">$1.200</span>
+                </div>
+                <div class="menu-card" data-nombre="Mote con Huesillo">
+                    <h4>Mote con Huesillo</h4>
+                    <p>Postre tradicional chileno</p>
+                    <span class="precio">$1.500</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mesas -->
+        <section id="mesas" class="seccion oculto">
+            <h2>Gestión de Mesas</h2>
+            <p>Configura y organiza las mesas del local.</p>
+        </section>
+
+        <!-- Clientes -->
+        <section id="clientes" class="seccion oculto">
+            <h2>Gestión de Clientes</h2>
+            <form id="formCrearCliente">
+                <input type="text" id="nombre" placeholder="Nombre" required>
+                <input type="text" id="rut" placeholder="RUT" required>
+                <input type="email" id="correo" placeholder="Correo" required>
+                <input type="text" id="telefono" placeholder="Teléfono">
+                <input type="text" id="direccion" placeholder="Dirección">
+                <button type="submit">Registrar Cliente</button>
+            </form>
+
+            <h3>Buscar Cliente</h3>
+            <input type="text" id="busquedaCliente" placeholder="Buscar por nombre o RUT">
+            <button id="btnBuscarCliente">Buscar</button>
+
+            <h3>Lista de Clientes</h3>
+            <table id="tablaClientes" border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>RUT</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+        <!-- Usuarios -->
+        <section id="usuarios" class="seccion oculto">
+            <h2>Gestión de Usuarios</h2>
+            <p>Administración avanzada para roles y permisos.</p>
+        </section>
+    </main>
+
+    <script type="module" src="/static/js/main.js"></script>
+    <script type="module" src="/static/js/dashboard.js"></script>
+    <script type="module" src="/static/js/clientes.js"></script>
+</body>
+</html>

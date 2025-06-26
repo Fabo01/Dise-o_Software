@@ -1,22 +1,17 @@
-from datetime import datetime
-from Backend.Aplicacion.Interfaces.Cliente_Repositorio_Interfaz import IClienteRepositorio
-from Backend.Dominio.Entidades.Cliente_Entidad import ClienteEntidad
 from Backend.Dominio.Objetos_Valor.Correo_VO import CorreoVO
+from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
+from Backend.Dominio.Factories.Cliente_Factory import ClienteFactory  # Importa la factory
 
 class ClienteServicio:
     """
     Servicio que implementa los casos de uso relacionados con la gestión de clientes.
     """
-    
-    def __init__(self, cliente_repositorio: IClienteRepositorio):
-        """
-        Constructor del servicio de cliente
-        
-        Args:
-            cliente_repositorio (IClienteRepositorio): Repositorio de clientes a utilizar
-        """
+    def __init__(self, cliente_repositorio, observer_service=None, cliente_factory=None):
+        # Inyección de dependencias (Dependency Injection)
         self.cliente_repositorio = cliente_repositorio
-    
+        self.observer_service = observer_service or ObserverServicio()
+        self.cliente_factory = cliente_factory or ClienteFactory()  # Usa la factory
+
     def registrar_cliente(self, datos_cliente):
         """
         Registra un nuevo cliente en el sistema
@@ -49,17 +44,22 @@ class ClienteServicio:
         except ValueError as e:
             raise ValueError(str(e))
         
-        # Crear entidad
-        cliente = ClienteEntidad(
+        # Crear entidad usando la factory
+        cliente = self.cliente_factory.crear(
             nombre=datos_cliente['nombre'],
-            correo=correo,
+            correo=datos_cliente['correo'],
             rut=datos_cliente['rut'],
             telefono=datos_cliente.get('telefono', ''),
             direccion=datos_cliente.get('direccion', ''),
         )
         
         # Guardar usando el repositorio
-        return self.cliente_repositorio.guardar(cliente)
+        cliente_guardado = self.cliente_repositorio.guardar(cliente)
+        # Notificar a los observadores si hay alguno registrado
+        if self.observer_service:
+            mensaje = f"Nuevo cliente registrado: {cliente_guardado.nombre} ({cliente_guardado.rut})"
+            self.observer_service.notificar(mensaje)
+        return cliente_guardado
         
     def actualizar_cliente(self, id, datos_cliente):
         """

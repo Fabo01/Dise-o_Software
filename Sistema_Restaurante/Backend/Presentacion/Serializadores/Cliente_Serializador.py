@@ -1,32 +1,35 @@
 from rest_framework import serializers
+from Backend.Infraestructura.Modelos.Cliente_Modelo import ClienteModelo
 
-class ClienteSerializador(serializers.Serializer):
+class ClienteSerializador(serializers.ModelSerializer):
     """
-    Serializador para la entidad Cliente.
-    Convierte objetos Cliente a JSON y viceversa.
+    Serializador para la entidad Cliente basado en el modelo ORM.
+    Convierte objetos ClienteModelo a JSON y viceversa.
     """
-    id = serializers.IntegerField(read_only=True)
-    nombre = serializers.CharField(max_length=100, required=True)
     rut = serializers.CharField(max_length=12, required=True)
-    correo = serializers.EmailField(required=True, allow_blank=False)
-    telefono = serializers.CharField(max_length=15, required=False, allow_blank=True)
-    direccion = serializers.CharField(max_length=200, required=False, allow_blank=True)
-    estado = serializers.CharField(read_only=True)
-    fecha_registro = serializers.DateTimeField(read_only=True)
-    ultima_visita = serializers.DateTimeField(read_only=True)
-    
+
+    class Meta:
+        model = ClienteModelo
+        fields = '__all__'
+        read_only_fields = ('ultima_visita', 'estado')  # <-- Solo lectura
+
     def to_representation(self, instance):
         """
         Convierte una entidad Cliente a un diccionario para serialización
         """
-        return {
-            'id': instance.id,
-            'nombre': instance.nombre,
-            'rut': instance.rut,
-            'correo': str(instance.correo),  # Convertir CorreoVO a cadena
-            'telefono': instance.telefono or '',
-            'direccion': instance.direccion or '',
-            'estado': instance.estado,
-            'fecha_registro': instance.fecha_registro,
-            'ultima_visita': instance.ultima_visita
-        }
+        data = super().to_representation(instance)
+        data['correo'] = str(data.get('correo', ''))  # Asegura string
+        data['telefono'] = data.get('telefono', '') or ''
+        data['direccion'] = data.get('direccion', '') or ''
+        data['rut'] = data.get('rut', '') or ''
+        return data
+
+    def validate_rut(self, value):
+        # Aquí puedes agregar tu lógica de validación de RUT chileno
+        # Por ejemplo, usando tu objeto de valor RutVO o Rut
+        from Backend.Dominio.Objetos_Valor.RutVO import RutVO
+        try:
+            RutVO(value)
+        except Exception:
+            raise serializers.ValidationError("RUT inválido")
+        return value

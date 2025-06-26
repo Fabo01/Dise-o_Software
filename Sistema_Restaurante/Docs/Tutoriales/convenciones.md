@@ -68,6 +68,14 @@ El sistema implementa los siguientes patrones:
 4. **Factory Method**: Para crear instancias complejas
 5. **Service Layer**: Para implementar casos de uso de la aplicación
 
+## Pruebas y Desarrollo Guiado por Comportamiento (BDD)
+
+- Todas las pruebas del proyecto deben implementarse utilizando exclusivamente BDD (Behavior Driven Development).
+- Se debe emplear un framework BDD adecuado para Python/Django (por ejemplo, Behave, pytest-bdd o similar).
+- Cada nueva funcionalidad o implementación debe incluir sus respectivos tests BDD antes o junto con el código.
+- Los escenarios de prueba deben estar escritos en lenguaje natural (español) y reflejar los requisitos y comportamientos esperados del sistema.
+- No se permite el uso de TDD puro ni tests unitarios tradicionales fuera del enfoque BDD.
+
 ---
 
 *Este documento debe actualizarse conforme evoluciona el proyecto y se establecen nuevas convenciones.*

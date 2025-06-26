@@ -3,9 +3,12 @@ Configuración de Django para el proyecto Sistema de Restaurante.
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Directorio base
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 # Configuración de seguridad
 SECRET_KEY = 'django-insecure-abcdefghijklmnopqrstuvwxyz1234567890'
@@ -24,6 +27,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'Backend.Infraestructura',  # Ensure this app is listed
     'Backend.Presentacion',     # Correct app path
+    'drf_yasg',  # Para documentación Swagger/OpenAPI
 ]
 
 # Middleware
@@ -62,13 +66,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Backend.Config.wsgi.application'
 
 # Configuración de base de datos
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'restaurant_db',
+        'USER': 'restaurant_user',
+        'PASSWORD': 'Note12pro.',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
     }
 }
-
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -94,11 +105,14 @@ USE_TZ = True
 
 # Archivos estáticos
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'Frontend'),
+]
+TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'Frontend')]
 
 # Configuración para archivos subidos
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/Frontend/Static/')
 
 # Tipo de campo por defecto para claves primarias
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -106,6 +120,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configuración de CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Si usas React
+    "http://localhost:5500",  # Si usas Live Server de VS Code
+    "http://127.0.0.1:5500",
+]
 
 # Configuración de REST Framework
 REST_FRAMEWORK = {
@@ -125,4 +145,17 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
     ],
+}
+
+# Configuración de Swagger/Redoc
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    },
+    'DOC_EXPANSION': 'none',
 }

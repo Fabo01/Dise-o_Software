@@ -3,8 +3,9 @@ from datetime import datetime
 
 from Backend.Dominio.Entidades.Cliente_Entidad import ClienteEntidad
 from Backend.Infraestructura.Modelos.Cliente_Modelo import ClienteModelo
+from Backend.Aplicacion.Interfaces.ICliente_Repositorio import IClienteRepositorio
 
-class ClienteRepositorio:
+class ClienteRepositorio(IClienteRepositorio):
     """
     Implementación concreta del repositorio de clientes usando Django ORM.
     """
@@ -36,7 +37,14 @@ class ClienteRepositorio:
             cliente.id = cliente_modelo.id
         
         return self._convertir_a_entidad(cliente_modelo)
-        
+    
+    def buscar_por_nombre(self, nombre):
+        """
+        Busca clientes que contengan el nombre especificado (case-insensitive)
+        """
+        clientes_modelo = ClienteModelo.objects.filter(nombre__icontains=nombre)
+        return [self._convertir_a_entidad(cliente) for cliente in clientes_modelo]
+
     def buscar_por_id(self, id):
         """
         Busca un cliente por su ID
@@ -98,3 +106,4 @@ class ClienteRepositorio:
         cliente.fecha_registro = cliente_modelo.fecha_registro
         cliente.ultima_visita = cliente_modelo.ultima_visita
         return cliente
+

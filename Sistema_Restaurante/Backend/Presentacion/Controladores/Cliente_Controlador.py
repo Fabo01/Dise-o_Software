@@ -1,22 +1,25 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import Http404
 
 from Backend.Aplicacion.Servicios.Cliente_Servicio import ClienteServicio
 from Backend.Infraestructura.Repositorios.Cliente_Repositorio import ClienteRepositorio
 from Backend.Presentacion.Serializadores.Cliente_Serializador import ClienteSerializador
+from Backend.Aplicacion.Servicios.ConsoleNotificationObserver import ConsoleNotificationObserver
+from Backend.Aplicacion.Servicios.Observer_Servicio import ObserverServicio
 
 class ClienteAPI(APIView):
     """
     API para la gestión de clientes
     """
-    
+    observer_service = ObserverServicio()
+    observer_registrado = False
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Inyección de dependencias
-        self.servicio_cliente = ClienteServicio(ClienteRepositorio())
-    
+        # Inyección de dependencias (Repository Pattern)
+        self.servicio_cliente = ClienteServicio(ClienteRepositorio(), observer_service=ClienteAPI.observer_service)
+
     def get(self, request, id=None):
         """
         Obtiene un cliente por su ID o lista todos los clientes
@@ -54,7 +57,12 @@ class ClienteAPI(APIView):
                     clientes = self.servicio_cliente.buscar_clientes_por_nombre(nombre)
                 else:
                     clientes = self.servicio_cliente.listar_clientes(solo_activos)
-                    
+                
+                # Asegurarse de que 'clientes' sea una lista, no un set ni queryset
+                if isinstance(clientes, set):
+                    clientes = list(clientes)
+                elif not isinstance(clientes, list):
+                    clientes = list(clientes)
                 serializer = ClienteSerializador(clientes, many=True)
                 return Response(serializer.data)
             except Exception as e:
@@ -126,6 +134,19 @@ class ClienteAPI(APIView):
                 return Response({"error": "Cliente no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    # Endpoint para registrar un observer de consola y probar el patrón observer
+    def post_registrar_observer(self, request):
+        """
+        Endpoint de prueba para registrar un observer de consola.
+        """
+        if not ClienteAPI.observer_registrado:
+            observer = ConsoleNotificationObserver()
+            ClienteAPI.observer_service.registrar(observer)
+            ClienteAPI.observer_registrado = True
+            return Response({"mensaje": "Observer de consola registrado. Ahora cualquier registro de cliente notificará en consola."})
+        else:
+            return Response({"mensaje": "Observer ya estaba registrado."})
 
 
 class ClienteEstadoAPI(APIView):

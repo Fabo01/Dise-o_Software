@@ -1,0 +1,611 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    background-color: #f5f7fa; /* Sidebar antes, ahora fondo principal */
+    color: #333;
+}
+
+/* Sidebar moderna tipo dashboard */
+.sidebar {
+    width: 220px;
+    background: #ff7a00; /* Naranjo */
+    color: #fff;
+    min-height: 100vh;
+    border-right: 1.5px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px 0 16px 0;
+    box-shadow: 2px 0 12px 0 rgba(0,0,0,0.04); /* Sombra suave */
+}
+
+.sidebar .logo {
+    width: 69px;
+    margin: 0 auto 32px auto;
+    display: block;
+    /* filter: brightness(0) invert(1); */
+}
+
+.sidebar nav ul {
+    width: 100%;
+    list-style: none;
+    padding: 0 0 0 0;
+    margin: 0;
+}
+
+.sidebar nav li {
+    margin-bottom: 8px;
+}
+
+.sidebar nav button,
+.sidebar nav .seccion-titulo {
+    background: none;
+}
+
+.sidebar nav .seccion-titulo {
+    color: #ffd5a5;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 18px 0 8px 24px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.sidebar nav button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    text-align: left;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar nav button:hover,
+.sidebar nav button.active {
+    background: #f3f4f6;
+    color: #ff7a00;
+}
+
+.sidebar nav button.active,
+.sidebar nav button:hover {
+    background: #fff3e6;
+    color: #ff7a00;
+}
+
+.contenido {
+    flex: 1;
+    padding: 30px;
+    background-color: #f5f7fa; /* Sidebar antes, ahora fondo principal */
+}
+
+.seccion {
+    display: none;
+    margin-top: 30px;
+}
+
+.seccion:not(.oculto) {
+    display: block;
+}
+
+.seccion-titulo {
+    color: #ffd5a5;
+    margin: 15px 0 5px;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+.oculto {
+    display: none;
+}
+
+footer.creditos {
+    margin-top: auto;
+    width: 100%;
+    font-size: 13px;
+    color: #fff; /* Letras blancas */
+    background: none;
+    text-align: center;
+    padding: 18px 0 0 0;
+    border-top: 1px solid #ffd5a5;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+footer.creditos .copyright {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+/* Contenedor principal de pedidos */
+#formPedido {
+    background: #fff3e6;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(255, 122, 0, 0.25);
+    max-width: 600px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+#inputPedido {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #ff7a00;
+    border-radius: 8px;
+    font-size: 16px;
+    outline-offset: 2px;
+    transition: border-color 0.3s ease;
+}
+
+#inputPedido:focus {
+    border-color: #ff4500;
+}
+
+/* Botón enviar */
+#formPedido button[type="submit"] {
+    background-color: #ff7a00;
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#formPedido button[type="submit"]:hover {
+    background-color: #e66b00;
+}
+
+/* Filtro estado */
+#filtroEstado {
+    margin-bottom: 20px;
+    padding: 8px 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1.5px solid #ff7a00;
+    background: #fff3e6;
+    cursor: pointer;
+    width: 200px;
+}
+
+/* Tabla pedidos */
+#tablaPedidos {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+#tablaPedidos thead th {
+    background-color: #ff7a00;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px 10px 0 0;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+#tablaPedidos tbody tr {
+    background-color: #fff3e6;
+    box-shadow: 0 1px 3px rgba(255, 122, 0, 0.15);
+    border-radius: 10px;
+    transition: transform 0.15s ease;
+}
+
+#tablaPedidos tbody tr:hover {
+    transform: translateX(6px);
+}
+
+#tablaPedidos th,
+#tablaPedidos td {
+    width: 150px; /* Ajusta este valor según lo que necesites */
+    min-width: 100px;
+    max-width: 200px;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+
+#tablaPedidos th:nth-child(1),
+#tablaPedidos td:nth-child(1) {
+    width: 200px; /* Por ejemplo, para la columna de "Pedido" */
+}
+
+#tablaPedidos th:nth-child(2),
+#tablaPedidos td:nth-child(2) {
+    width: 120px; /* Por ejemplo, para la columna de "Estado" */
+}
+
+#tablaPedidos th:last-child,
+#tablaPedidos td:last-child {
+    width: 160px; /* Por ejemplo, para la columna de "Acciones" */
+}
+
+#tablaPedidos td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Botones en acciones */
+#tablaPedidos button {
+    background-color: #ff7a00;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    margin-right: 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+#tablaPedidos button:hover {
+    background-color: #e66b00;
+}
+
+/* Estadísticas resumen */
+.estadisticas {
+    margin-top: 25px;
+    display: flex;
+    gap: 30px;
+    justify-content: flex-start;
+    font-weight: 600;
+    font-size: 16px;
+    color: #ff7a00;
+}
+
+.estadisticas span {
+    background: #fff3e6;
+    padding: 10px 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(255, 122, 0, 0.2);
+}
+
+.dashboard-resumen {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 1;
+    min-width: 200px;
+    background-color: #ffe1c4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: #ff7a00;
+}
+
+.card p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Estilo para la tabla de Lista de Pedidos */
+#tablaListos {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 15px;
+}
+
+#tablaListos thead th {
+    background-color: #ff7a00;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px 10px 0 0;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+#tablaListos tbody tr {
+    background-color: #fff3e6;
+    box-shadow: 0 1px 3px rgba(255, 122, 0, 0.15);
+    border-radius: 10px;
+    transition: transform 0.15s ease;
+}
+
+#tablaListos tbody tr:hover {
+    transform: translateX(6px);
+}
+
+#tablaListos th,
+#tablaListos td {
+    width: 150px;
+    min-width: 100px;
+    max-width: 200px;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+
+#tablaListos th:nth-child(1),
+#tablaListos td:nth-child(1) {
+    width: 200px;
+}
+
+#tablaListos th:nth-child(2),
+#tablaListos td:nth-child(2) {
+    width: 120px;
+}
+
+#tablaListos th:last-child,
+#tablaListos td:last-child {
+    width: 160px;
+}
+
+#tablaListos td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Botones en acciones de la lista */
+#tablaListos button {
+    background-color: #ff7a00;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    margin-right: 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+#tablaListos button:hover {
+    background-color: #e66b00;
+}
+
+/* Nueva sección: Pedidos en Preparación */
+#preparacion {
+    margin-top: 0;
+}
+
+#tablaPreparacion {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+#tablaPreparacion thead th {
+    background-color: #ff7a00;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px 10px 0 0;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+#tablaPreparacion tbody tr {
+    background-color: #fff3e6;
+    box-shadow: 0 1px 3px rgba(255, 122, 0, 0.15);
+    border-radius: 10px;
+    transition: transform 0.15s ease;
+}
+
+#tablaPreparacion tbody tr:hover {
+    transform: translateX(6px);
+}
+
+#tablaPreparacion th,
+#tablaPreparacion td {
+    width: 150px;
+    min-width: 100px;
+    max-width: 200px;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+
+#tablaPreparacion th:nth-child(1),
+#tablaPreparacion td:nth-child(1) {
+    width: 200px;
+}
+
+#tablaPreparacion th:nth-child(2),
+#tablaPreparacion td:nth-child(2) {
+    width: 120px;
+}
+
+#tablaPreparacion th:last-child,
+#tablaPreparacion td:last-child {
+    width: 160px;
+}
+
+#tablaPreparacion td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Botones en acciones de la tabla de preparación */
+#tablaPreparacion button {
+    background-color: #ff7a00;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    margin-right: 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+#tablaPreparacion button:hover {
+    background-color: #e66b00;
+}
+
+.dashboard-recientes {
+    margin-top: 32px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    padding: 18px 24px;
+    max-width: 420px;
+}
+
+.dashboard-recientes h3 {
+    margin-top: 0;
+    color: #ff7a00;
+    font-size: 18px;
+}
+
+#listaPedidosRecientes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#listaPedidosRecientes li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ffe1c4;
+    font-size: 15px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#listaPedidosRecientes li:last-child {
+    border-bottom: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+table, th, td {
+    border: none;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+.menu-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.menu-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.10);
+  padding: 22px 28px;
+  min-width: 220px;
+  max-width: 260px;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.18s, box-shadow 0.18s;
+  border: 1.5px solid #ffe1c4;
+}
+
+.menu-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(255, 122, 0, 0.18);
+  border-color: #ff7a00;
+}
+
+.menu-card h4 {
+  margin: 0 0 6px 0;
+  color: #ff7a00;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.menu-card p {
+  margin: 0 0 14px 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.menu-card .precio {
+  margin-top: auto;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1b1b1b;
+  background: #fff3e6;
+  padding: 6px 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(255, 122, 0, 0.08);
+}
+
+/* Nueva tabla: Cuentas por Cobrar */
+#tablaCuentas {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.10);
+}
+
+#tablaCuentas th {
+  background-color: #ff7a00;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 10px 10px 0 0;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+#tablaCuentas td {
+  padding: 12px 15px;
+  vertical-align: middle;
+  border: none;
+  font-size: 16px;
+}
+
+#tablaCuentas tbody tr {
+  background-color: #fff3e6;
+  border-radius: 10px;
+}
+
+#tablaCuentas tfoot td {
+  background: #ffe1c4;
+  font-size: 18px;
+  color: #ff7a00;
+  border-radius: 0 0 10px 10px;
+}
