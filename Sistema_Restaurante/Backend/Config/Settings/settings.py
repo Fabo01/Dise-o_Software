@@ -105,11 +105,14 @@ USE_TZ = True
 
 # Archivos estáticos
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'Frontend'),
+]
+TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'Frontend')]
 
 # Configuración para archivos subidos
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Backend/Static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Frontend/Static/')
 
 # Tipo de campo por defecto para claves primarias
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -117,6 +120,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configuración de CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Si usas React
+    "http://localhost:5500",  # Si usas Live Server de VS Code
+    "http://127.0.0.1:5500",
+]
 
 # Configuración de REST Framework
 REST_FRAMEWORK = {
