@@ -1050,13 +1050,13 @@ sequenceDiagram
     DA->>DB: DELETE FROM item_pedido WHERE pedido_id=...
     activate DB
     DB-->>DA: Confirmación
-    deactivate BD
+    deactivate DB
     
     loop Para cada ítem
         DA->>DB: INSERT INTO item_pedido
         activate DB
         DB-->>DA: Confirmación
-        deactivate BD
+        deactivate DB
     end
     
     DA-->>LN: Éxito/Error
@@ -1066,6 +1066,7 @@ sequenceDiagram
     
     UI->>JL: Muestra confirmación de actualización
     deactivate UI
+
 ```
 
 #### CU-A18: Cancelar Pedido
@@ -1797,80 +1798,90 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    actor Usuario as Usuario (JL/JT)
-    participant UI as Frontend UI
-    participant GE as Gestión Estado
-    participant SA as Servicios API
-    participant AC as API Controller
-    participant SV as Service
-    participant RP as Repository
-    participant PRP as PedidoRepository
-    participant ORM as ORM Django
-    participant BD as Base de Datos
-
-    Usuario->>UI: Selecciona cliente y elige "Eliminar"
+    actor JL as Jefe Local
+    participant UI as Interfaz de Usuario
+    participant LN as Lógica de Negocio
+    participant DA as Acceso a Datos
+    participant DB as Base de Datos SQLite
+    
+    JL->>UI: Busca y selecciona pedido
     activate UI
-    UI->>UI: Solicita confirmación
-    Usuario->>UI: Confirma eliminación
+    UI->>LN: buscarPedido(criterio)
+    activate LN
+    LN->>DA: consultarPedido(criterio)
+    activate DA
+    DA->>DB: SELECT FROM pedido
+    activate DB
+    DB-->>DA: Datos del pedido
+    deactivate DB
     
-    UI->>GE: dispatch(deleteClient(id))
-    activate GE
-    GE->>SA: deleteClient(id)
-    activate SA
-    SA->>AC: DELETE /api/clients/{id}
-    activate AC
+    DA->>DB: SELECT FROM item_pedido WHERE pedido_id=...
+    activate DB
+    DB-->>DA: Ítems del pedido
+    deactivate DB
     
-    AC->>SV: eliminarCliente(id)
-    activate SV
+    DA-->>LN: Datos completos
+    deactivate DA
+    LN-->>UI: Información del pedido
+    deactivate LN
     
-    SV->>PRP: findPendingOrdersByClient(id)
-    activate PRP
-    PRP->>ORM: Pedido.objects.filter(cliente_id=id, estado__in=['pendiente', 'en_proceso'])
-    activate ORM
-    ORM->>BD: SELECT FROM pedido WHERE cliente_id=... AND estado IN...
-    activate BD
-    BD-->>ORM: Pedidos activos
-    deactivate BD
-    ORM-->>PRP: Lista de pedidos
-    deactivate ORM
-    PRP-->>SV: PedidosDTO activos
-    deactivate PRP
+    UI->>UI: Muestra detalles del pedido
+    JL->>UI: Selecciona "Editar pedido"
+    UI->>UI: Habilita edición
     
-    alt Sin pedidos activos
-        SV->>RP: delete(id)
-        activate RP
-        RP->>ORM: Cliente.objects.filter(id=id).update(estado='eliminado')
-        activate ORM
-        ORM->>BD: UPDATE cliente SET estado='eliminado' WHERE id=...
-        activate BD
-        BD-->>ORM: Confirmación
-        deactivate BD
-        ORM-->>RP: Confirmación
-        deactivate ORM
-        RP-->>SV: Éxito
-        deactivate RP
-        SV-->>AC: Éxito
-        deactivate SV
+    alt Modificar ítems
+        UI->>LN: obtenerMenusDisponibles()
+        activate LN
+        LN->>DA: consultarMenus()
+        activate DA
+        DA->>DB: SELECT FROM menu
+        activate DB
+        DB-->>DA: Lista de menús
+        deactivate DB
+        DA-->>LN: Resultados
+        deactivate DA
+        LN-->>UI: Menús disponibles
+        deactivate LN
         
-        AC-->>SA: Response 204 No Content
-        deactivate AC
-        SA-->>GE: Cliente eliminado
-        deactivate SA
-        GE->>UI: Actualiza estado
-        deactivate GE
-        UI->>Usuario: Notificación de éxito
-    else Con pedidos activos
-        SV-->>AC: Error: Cliente con pedidos pendientes
-        deactivate SV
-        AC-->>SA: Response 400 Bad Request
-        deactivate AC
-        SA-->>GE: Error con detalles
-        deactivate SA
-        GE->>UI: Actualiza estado con error
-        deactivate GE
-        UI->>Usuario: Muestra mensaje de error
+        UI->>JL: Muestra menús y los ítems actuales
+        
+        loop Para modificaciones de ítems
+            JL->>UI: Agrega/elimina ítems o modifica cantidades
+            UI->>UI: Actualiza lista y recalcula total
+        end
     end
+    
+    JL->>UI: Confirma cambios
+    
+    UI->>LN: actualizarPedido(pedidoId, items)
+    activate LN
+    LN->>DA: modificarPedido(pedidoId, total)
+    activate DA
+    DA->>DB: UPDATE pedido
+    activate DB
+    DB-->>DA: Confirmación
+    deactivate DB
+    
+    DA->>DB: DELETE FROM item_pedido WHERE pedido_id=...
+    activate DB
+    DB-->>DA: Confirmación
+    deactivate DB
+    
+    loop Para cada ítem
+        DA->>DB: INSERT INTO item_pedido
+        activate DB
+        DB-->>DA: Confirmación
+        deactivate DB
+    end
+    
+    DA-->>LN: Éxito/Error
+    deactivate DA
+    LN-->>UI: Resultado operación
+    deactivate LN
+    
+    UI->>JL: Muestra confirmación de actualización
     deactivate UI
+
 ```
 
 #### CU-R04: Buscar Cliente
