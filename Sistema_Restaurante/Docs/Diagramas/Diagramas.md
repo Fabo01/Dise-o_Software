@@ -20,6 +20,7 @@ Para facilitar la referencia a diagramas específicos en la documentación y en 
 | **DOR** | Diagrama de Objetos Refactorizado |
 | **DCOB** | Diagrama de Componentes Basicos |
 | **DCOD** | Diagrama de Componentes Distribuidos |
+| **DCU** | Diagrama de Caso de Uso |
 
 ## Índice
 1. [Diagramas de Arquitectura](#diagramas-de-arquitectura)
@@ -28,6 +29,7 @@ Para facilitar la referencia a diagramas específicos en la documentación y en 
 4. [Diagramas MER (Modelo Entidad-Relación)](#diagramas-mer)
 5. [Diagramas de Objetos](#diagramas-de-objetos)
 6. [Diagramas de Componentes](#diagramas-de-componentes)
+7. [Diagramas de Caso de Uso](#diagramas-de-caso-de-uso)
 
 ## Diagramas de Arquitectura
 
@@ -114,6 +116,10 @@ Para facilitar la referencia a diagramas específicos en la documentación y en 
 ### Sistema Refactorizado: Componentes Distribuidos (DCOD)
 
 ![Diagrama componentes distribuidos](componentes/componentes_actual.webp)
+
+## Diagramas de Caso de Uso
+
+![Diagrama Caso de Uso](casos_uso/Casos_de_uso.webp)
 
 ## Resumen de Mejoras
 
