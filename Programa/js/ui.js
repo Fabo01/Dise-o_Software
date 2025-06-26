@@ -14,9 +14,23 @@ export class UI {
   handleAgregarPedido(event) {
     event.preventDefault();
     const nombre = this.elementos.inputPedido.value.trim();
-    if (nombre) {
-      this.gestorPedidos.agregarPedido(nombre);
+    const selectCliente = document.getElementById('inputClientePedido');
+    const rutCliente = selectCliente.value;
+    // clientes es global en gestionExtra.js
+    const clienteObj = window.clientes?.find(c => c.rut === rutCliente);
+    if (nombre && clienteObj) {
+      console.log('Pedido creado:', {
+        nombre,
+        cliente: clienteObj.nombre + ' ' + clienteObj.apellido,
+        mesa: clienteObj.mesa
+      });
+      this.gestorPedidos.agregarPedido({
+        nombre,
+        cliente: clienteObj.nombre + ' ' + clienteObj.apellido,
+        mesa: clienteObj.mesa
+      });
       this.elementos.inputPedido.value = '';
+      selectCliente.value = '';
     }
   }
 
@@ -41,6 +55,14 @@ export class UI {
       const tdEstado = document.createElement('td');
       tdEstado.textContent = pedido.estado;
       fila.appendChild(tdEstado);
+
+      const tdCliente = document.createElement('td');
+      tdCliente.textContent = pedido.cliente || '-';
+      fila.appendChild(tdCliente);
+
+      const tdMesa = document.createElement('td');
+      tdMesa.textContent = pedido.mesa || '-';
+      fila.appendChild(tdMesa);
 
       const tdAcciones = document.createElement('td');
 
@@ -151,6 +173,60 @@ export class UI {
     }
 
     this.actualizarPedidosRecientes();
+
+    // Renderizar tabla de cuentas agrupada por mesa
+    const tablaCuentas = document.getElementById('tablaCuentas');
+    if (tablaCuentas) {
+      const tbodyCuentas = tablaCuentas.querySelector('tbody');
+      tbodyCuentas.innerHTML = '';
+
+      // Agrupa pedidos "Listo" por mesa
+      const cuentasPorMesa = {};
+      this.gestorPedidos.pedidos
+        .filter(p => p.estado === 'Listo')
+        .forEach(pedido => {
+          const mesa = pedido.mesa || 'Sin mesa';
+          if (!cuentasPorMesa[mesa]) cuentasPorMesa[mesa] = [];
+          cuentasPorMesa[mesa].push(pedido);
+        });
+
+      Object.entries(cuentasPorMesa).forEach(([mesa, pedidosMesa]) => {
+        // Nombres de los productos listos en esa mesa
+        const pedidosNombres = pedidosMesa.map(p => p.nombre).join(', ');
+        // Suma de precios de los productos listos en esa mesa
+        const subtotal = pedidosMesa.reduce((sum, p) => {
+          return sum + (window.obtenerPrecioPorNombre ? window.obtenerPrecioPorNombre(p.nombre) : 0);
+        }, 0);
+
+        // CREA la fila y asigna los datos en el orden correcto
+        const fila = document.createElement('tr');
+
+        // Mesa
+        const tdMesa = document.createElement('td');
+        tdMesa.textContent = mesa;
+        fila.appendChild(tdMesa);
+
+        // Pedidos
+        const tdPedidos = document.createElement('td');
+        tdPedidos.textContent = pedidosNombres;
+        fila.appendChild(tdPedidos);
+
+        // Subtotal
+        const tdSubtotal = document.createElement('td');
+        tdSubtotal.textContent = `$${subtotal.toLocaleString('es-CL')}`;
+        fila.appendChild(tdSubtotal);
+
+        // Acciones
+        const tdAcciones = document.createElement('td');
+        const btnBoleta = document.createElement('button');
+        btnBoleta.textContent = 'Boleta PDF';
+        btnBoleta.onclick = () => window.generarBoletaPDFMesa(mesa);
+        tdAcciones.appendChild(btnBoleta);
+        fila.appendChild(tdAcciones);
+
+        tbodyCuentas.appendChild(fila);
+      });
+    }
   }
 
   actualizarResumenDashboard() {

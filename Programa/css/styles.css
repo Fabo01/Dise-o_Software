@@ -609,3 +609,147 @@ th, td {
   color: #ff7a00;
   border-radius: 0 0 10px 10px;
 }
+
+/* --- Gestión de Mesas y Clientes --- */
+
+#formMesa, #formCliente {
+    background: #fff3e6;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(255, 122, 0, 0.18);
+    max-width: 600px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#formMesa input, #formCliente input, #formCliente select {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #ff7a00;
+    border-radius: 8px;
+    font-size: 16px;
+    outline-offset: 2px;
+    transition: border-color 0.3s ease;
+    background: #fff;
+    color: #333;
+    min-width: 120px;
+}
+
+#formMesa input:focus, #formCliente input:focus, #formCliente select:focus {
+    border-color: #ff4500;
+}
+
+#formMesa button[type="submit"], #formCliente button[type="submit"] {
+    background-color: #ff7a00;
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#formMesa button[type="submit"]:hover, #formCliente button[type="submit"]:hover {
+    background-color: #e66b00;
+}
+
+#tablaMesas, #tablaClientes {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(255, 122, 0, 0.10);
+    margin-top: 10px;
+}
+
+#tablaMesas th, #tablaClientes th {
+    background-color: #ff7a00;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px 10px 0 0;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+#tablaMesas td, #tablaClientes td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border: none;
+    font-size: 16px;
+}
+
+#tablaMesas tbody tr, #tablaClientes tbody tr {
+    background-color: #fff3e6;
+    border-radius: 10px;
+    transition: transform 0.15s ease;
+}
+
+#tablaMesas tbody tr:hover, #tablaClientes tbody tr:hover {
+    transform: translateX(6px);
+}
+
+#tablaMesas button, #tablaClientes button {
+    background-color: #ff7a00;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    margin-right: 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+#tablaMesas button:hover, #tablaClientes button:hover {
+    background-color: #e66b00;
+}
+
+#inputClientePedido {
+  border: 2px solid #ff7a00;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background: #fffbe6;
+  color: #333;
+  transition: border-color 0.3s;
+  outline: none;
+}
+#inputClientePedido:focus {
+  border-color: #ff4500;
+  background: #fff3e6;
+  box-shadow: 0 0 0 2px #ffb366;
+}
+
+button[onclick^="generarBoletaPDF"] {
+  background: #ff7a00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button[onclick^="generarBoletaPDF"]:hover {
+  background: #e66b00;
+}
+
+button[onclick^="generarBoletaPDFMesa"] {
+  background: #ff7a00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button[onclick^="generarBoletaPDFMesa"]:hover {
+  background: #e66b00;
+}

@@ -6,8 +6,9 @@ export class GestorPedidos {
     this.subscribers = [];
   }
 
-  agregarPedido(nombre) {
-    const pedido = new Pedido(nombre);
+  agregarPedido(data) {
+    // data debe ser {nombre, cliente, mesa}
+    const pedido = new Pedido(data);
     this.pedidos.push(pedido);
     this.notify();
   }

@@ -1,6 +1,8 @@
 export class Pedido {
-  constructor(nombre) {
+  constructor({nombre, cliente, mesa}) {
     this.nombre = nombre;
+    this.cliente = cliente;
+    this.mesa = mesa;
     this.estado = 'Pendiente'; // Estado inicial
   }
 
