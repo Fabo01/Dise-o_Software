@@ -1,0 +1,64 @@
+# Dockerfile.backend
+FROM python:3.12-slim
+
+# Configurar etiquetas y metadata
+LABEL maintainer="Sistema Restaurante Team"
+LABEL description="Backend Django para Sistema de Gestión de Restaurante"
+
+# Configurar variables de entorno
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=Backend.Config.Settings.docker
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    curl \
+    netcat-openbsd \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Crear directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de dependencias
+COPY requirements.txt .
+
+# Instalar dependencias Python
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Crear usuario no-root para seguridad
+RUN useradd --create-home --shell /bin/bash app && \
+    mkdir -p /app/logs /app/static /app/media && \
+    chown -R app:app /app
+
+# Copiar código fuente
+COPY . .
+
+# Asignar permisos
+RUN chown -R app:app /app
+
+# Cambiar a usuario no-root
+USER app
+
+# Copiar script de entrada
+COPY docker-entrypoint-backend.sh /app/
+USER root
+RUN chmod +x /app/docker-entrypoint-backend.sh
+USER app
+
+# Exponer puerto
+EXPOSE 8000
+
+# Comando por defecto
+ENTRYPOINT ["/app/docker-entrypoint-backend.sh"]
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/admin/ || exit 1
+
+# Comando por defecto
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

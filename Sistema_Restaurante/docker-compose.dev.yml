@@ -1,0 +1,53 @@
+version: '3.8'
+
+# Configuración específica para desarrollo
+services:
+  postgres:
+    extends:
+      file: docker-compose.yml
+      service: postgres
+    environment:
+      POSTGRES_DB: restaurant_db_dev
+      POSTGRES_USER: restaurant_user
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5433:5432"  # Puerto diferente para no conflictos
+
+  redis:
+    extends:
+      file: docker-compose.yml
+      service: redis
+    ports:
+      - "6380:6379"  # Puerto diferente para no conflictos
+
+  backend:
+    extends:
+      file: docker-compose.yml
+      service: backend
+    environment:
+      - DJANGO_SETTINGS_MODULE=Backend.Config.Settings.docker
+      - DATABASE_URL=postgresql://restaurant_user:Note12pro.@postgres:5432/restaurant_db_dev
+      - DEBUG=True
+    volumes:
+      - ./Backend:/app/Backend
+      - ./logs:/app/logs
+    ports:
+      - "8001:8000"  # Puerto diferente
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  frontend:
+    extends:
+      file: docker-compose.yml
+      service: frontend
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:8001
+    ports:
+      - "3001:3000"  # Puerto diferente
+
+networks:
+  default:
+    name: restaurant_dev_network

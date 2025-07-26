@@ -1,0 +1,37 @@
+# Dockerfile.frontend
+FROM node:18-alpine
+
+# Configurar etiquetas
+LABEL maintainer="Sistema Restaurante Team"
+LABEL description="Frontend para Sistema de Gestión de Restaurante"
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache \
+    curl \
+    bash
+
+# Crear directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de configuración de Node.js
+COPY Frontend/package*.json ./
+
+# Instalar dependencias
+RUN npm ci --only=production
+
+# Copiar código fuente del frontend
+COPY Frontend/ .
+
+# Copiar script de entrada y asignar permisos
+COPY docker-entrypoint-frontend.sh /app/
+RUN chmod +x /app/docker-entrypoint-frontend.sh
+
+# Exponer puerto
+EXPOSE 3000
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000 || exit 1
+
+# Comando por defecto (ejecutar como root para evitar problemas de permisos)
+CMD ["npm", "start"]
