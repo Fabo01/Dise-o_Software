@@ -7,14 +7,42 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from Backend.Presentacion.Views.Cliente_Views import ClienteViewSet
-from Backend.Presentacion.Views.Usuario_Views import UsuarioViewSet
-from Backend.Presentacion.Controladores.Ingrediente_Controlador import IngredienteViewSet
+
+# Importar los nuevos controladores
+from Backend.Presentacion.Controladores.ClienteController import ClienteController
+from Backend.Presentacion.Controladores.IngredienteController import IngredienteController
+
+# Importar controladores existentes (si existen)
+try:
+    from Backend.Presentacion.Views.Usuario_Views import UsuarioViewSet
+    from Backend.Presentacion.Controladores.Menu_Controlador import MenuViewSet
+    from Backend.Presentacion.Controladores.Pedido_Controlador import PedidoViewSet
+    from Backend.Presentacion.Controladores.Mesa_Controlador import MesaViewSet
+    from Backend.Presentacion.Controladores.Analytics_Controlador import AnalyticsViewSet
+    from Backend.Presentacion.Controladores.Delivery_Controlador import DeliveryControlador
+    from Backend.Presentacion.Controladores.Pagos_Controlador import PagosControlador
+except ImportError:
+    # Si no existen, los crearemos más adelante
+    pass
+
 import os
+
+# Configuración del router para API
 router = DefaultRouter()
-router.register(r'clientes', ClienteViewSet, basename='cliente')
-router.register(r'usuarios', UsuarioViewSet, basename='usuario')
-router.register(r'ingredientes', IngredienteViewSet, basename='ingrediente')
+router.register(r'clientes', ClienteController, basename='cliente')
+router.register(r'ingredientes', IngredienteController, basename='ingrediente')
+
+# Registrar otros controladores si existen
+try:
+    router.register(r'usuarios', UsuarioViewSet, basename='usuario')
+    router.register(r'menus', MenuViewSet, basename='menu')
+    router.register(r'pedidos', PedidoViewSet, basename='pedido')
+    router.register(r'mesas', MesaViewSet, basename='mesa')
+    router.register(r'analytics', AnalyticsViewSet, basename='analytics')
+    router.register(r'delivery', DeliveryControlador, basename='delivery')
+    router.register(r'pagos', PagosControlador, basename='pagos')
+except NameError:
+    pass
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -32,6 +60,8 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('', IndexHtmlView.as_view(), name='index'),  # <-- Esto sirve index.html en la raíz
     path('api/', include(router.urls)),
+    path('api/dashboard/', include('Backend.Presentacion.Urls.dashboard_urls')),
+    path('api/auth/', include('Backend.Presentacion.Urls.auth_urls')),
 ]
 
 if settings.DEBUG:

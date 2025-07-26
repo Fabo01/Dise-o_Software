@@ -1,5 +1,5 @@
 from django.db import models
-from .Pedido_Modelo import PedidoModelo
+from Backend.Infraestructura.Modelos.Pedido_Modelo import PedidoModelo
 
 class DeliveryPedidoModelo(models.Model):
     """

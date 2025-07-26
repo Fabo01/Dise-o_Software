@@ -1,7 +1,7 @@
 from django.db import models
-from .Pedido_Modelo import PedidoModelo
-from .Menu_Modelo import MenuModelo
-from .Ingrediente_Modelo import IngredienteModelo
+from Backend.Infraestructura.Modelos.Pedido_Modelo import PedidoModelo
+from Backend.Infraestructura.Modelos.Menu_Modelo import MenuModelo
+from Backend.Infraestructura.Modelos.Ingrediente_Modelo import IngredienteModelo
 
 class ItemPedidoModelo(models.Model):
     """

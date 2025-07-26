@@ -13,3 +13,7 @@ class OperacionInvalidaExcepcion(DominioExcepcion):
 class EntidadNoEncontradaExcepcion(DominioExcepcion):
     """Excepción lanzada cuando no se encuentra una entidad."""
     pass
+
+class RepositorioExcepcion(DominioExcepcion):
+    """Excepción lanzada cuando ocurre un error en el repositorio."""
+    pass

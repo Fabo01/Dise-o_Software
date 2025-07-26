@@ -356,3 +356,4 @@ Este patrón se utiliza en toda la aplicación para inyectar dependencias, lo qu
 ## Metodología del Proyecto
 
 El proyecto sigue la metodología Scrum con 5 integrantes dedicando 5 horas semanales cada uno. Se han definido 4 sprints (un Sprint 0 de 2 semanas y 3 sprints de 4 semanas cada uno) para completar la refactorización.
+
